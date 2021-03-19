@@ -1,0 +1,447 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{cancel}
+\usepackage{multirow}
+\usepackage{graphicx}
+
+
+\title{INFORMATICA TEORICA}
+\author{giosumarin}
+\date{March 2021}
+
+\begin{document}
+
+\maketitle
+
+\section{Lezione 1}
+\subsection{Definizione di funzione}
+
+Funzione: una legge/regola che ci dice come associare un elemento di $A$ a uno di $B$.
+
+
+\noindent
+Definizione globale: $f:A\rightarrow B$: chiamiamo $A$ il dominio della funzione e $B$ il codominio.
+
+
+\noindent
+Definizione locale: $a\rightarrow^f b$ oppure $f(a)=b$ con $b$ immagine di $a$ rispetto a $f$ e $a$ controimmagine di $b$ rispetto a $f$. 
+
+
+\noindent
+$f:\mathbb{N} \rightarrow \mathbb{N}$ con $\mathbb{N}=\{0,1,2,3,4,..\}$ e con $\mathbb{N}^+=\{1,2,3,4,..\}$
+\\
+Globale: $f(n)=\lfloor \sqrt{n} \rfloor$; Locale: $f(5)=\lfloor \sqrt{n} \rfloor$
+In una funzione, per definizione, un valore del dominio può portare a uno solo valore di codominio.
+
+\subsection{Funzione iniettiva, suriettiva e biettiva}
+\paragraph{Funzione Iniettiva}
+\begin{displaymath}\label{iniettiva}
+f:A\rightarrow B \textbf{ è iniettiva sse } \forall a_1, a_2 \in A \Rightarrow f(a_1) \neq f(a_2)
+\end{displaymath}
+ovvero non ci sono confluenze verso un punto del codominio.
+
+\paragraph{Funzione Suriettiva}
+\begin{displaymath}\label{suriettiva}
+f:A\rightarrow B \textbf{ è suriettiva sse } \forall b \in B,  \exists a \in A: f(a)=b
+\end{displaymath}
+
+Definiamo con $Im_f$ l'insieme delle immagini. Quindi 
+\begin{displaymath}\label{insieme_immagine}
+    \{Im_f=b \in B: \exists a t.c. f(a)=b\}=\{f(a), a \in A\}
+\end{displaymath}Possiamo quindi dire che in generale $Im_f \subseteq B$ ed è suriettiva sse $Im_f = B$, ovvero quando il grafico della funzione compre tutto l'asse $y$.
+
+\paragraph{Funzione Biettiva}
+Una funzione si dice biettiva quando è sia iniettiva che suriettiva, ovvero
+\begin{displaymath}\label{biettiva}
+    \forall b \in B \exists ! a \in A: f(a)=b
+\end{displaymath}
+dove con $\exists!$ indichiamo "esiste unico".
+
+\paragraph{Composizione di funzioni}
+Nota: non è commutativo
+\begin{displaymath}\label{composizione}
+    \begin{split}
+        f:A \rightarrow B\\
+        g:B \rightarrow C\\
+        \textbf{$f$ composto $g$: } g \cdot f: A \rightarrow C\\
+        \textbf{definita come } g \cdot f(a) = g(f(a))
+    \end{split}
+\end{displaymath}
+
+\paragraph{Funzione Inversa}
+\begin{displaymath}\label{inversa}
+    \begin{split}
+        f:A \rightarrow B \textbf{ biettiva}\\
+        f^{-1}:B \rightarrow A \textbf{ t.c. } f^{-1}(b) = a \leftrightarrow f(a)=b
+    \end{split}
+\end{displaymath}
+Definiamo 
+\begin{displaymath}
+    \begin{split}
+        i_A: A \rightarrow A \textbf{ con } i_A(a) = a
+    \end{split}
+\end{displaymath}
+che ci permette di dare una definizione ulteriore di funzione inversa combinando la funzione identità e la composizione
+\begin{displaymath}
+        f^{-1} \cdot f=i_A \wedge f \cdot f^{-1}=i_B
+\end{displaymath}
+
+\section{Lezione 2}
+\begin{displaymath}
+    \begin{split}
+        f(a)\downarrow: \textbf{ $f$ definita } \forall a \in A \textbf{ si dice che $f$ è totale}\\
+        f(a)\uparrow: \textbf{ non definita per ogni } a \in A.
+    \end{split}
+\end{displaymath}
+$f:A \rightarrow B$ è parziale se qualche elemento di A associa un elemento di AB, infatti:
+\begin{displaymath}
+    \begin{split}
+        Dom_f=\{a \in A: f(a) \downarrow \} \subseteq A\\
+        Dom_f \subsetneq A \Rightarrow f \textbf{ parziale (incluso stretto)}\\
+        Dom_f = A f \textbf{ totale}
+    \end{split}
+\end{displaymath}
+\paragraph{Totalizzare}
+\begin{displaymath}
+    \begin{split}
+        &f:A \rightarrow B \textbf{ parziale} \Rightarrow \tilde{f}:A \rightarrow B \cup \{\perp \} \textbf{ totale,}\\
+        &\textbf{Indichiamo } B \cup \{ \perp \} \rightarrow B_{\perp}\\
+        &\tilde{f}=
+        \begin{cases}
+            f(a) \text{ se } a \in Dom_f\\
+            \perp \textbf{ altrimenti} \\
+        \end{cases}
+    \end{split}
+\end{displaymath}
+
+\paragraph{Prodotto Cartesiano}
+\begin{displaymath}
+    \begin{split}
+        &A \times b = \{(a,b): a \in A \wedge b \in B \}\\
+        &\textbf{Nota: $\times$ non commutativa }A \times B \neq B \times A\\ 
+        &\textbf{Proiettore -iesimo} \pi_i:A_1 \times \dots \times A_n \rightarrow A_i \\
+        &\pi_i(a_1, \dots, a_n)=a_i \\
+        &\textbf{Indichiamo A per n volte come } A \times \dots \times A = A^n
+    \end{split}
+\end{displaymath}
+\paragraph{Insieme di funzioni}
+\begin{displaymath}
+    \begin{split}
+        &B^A = \{ f:A \rightarrow B\} = \textbf{ insieme delle funzioni da $A$ a $B$} \\
+        &B_{\perp}^{A} = \{ f:A \rightarrow B\} = \textbf{ insieme delle funzioni parziali da $A$ a $B$} \\
+    \end{split}
+\end{displaymath}
+\paragraph{Funzione di valutazione}
+Dati $A$, $B$ e $B_{\perp}^{A}$ si definisce funzione di valutazione
+\begin{displaymath}
+    \begin{split}
+        &w:B_{\perp}^{A} \times A \rightarrow B \textbf{ con } w(f,a) = f(a) \\
+    \end{split}
+\end{displaymath}
+Fissando $a$ eseguo un benchmark di funzioni, fissando $f$ creo i punti del grafico di $f$.
+
+\paragraph{Sistema di calcolo $C$}
+Abbiamo $P \in \text{PROG}$ che è una sequenza di regole che trasforma un dato di input in un dato di output $\Rightarrow P \in \textit{DATI}_{\perp}^{\textit{DATI}}$ è una funzione (in un linguaggio).
+
+\begin{displaymath}
+\begin{split}
+    &C:\textit{DATI}_{\perp}^{\textit{DATI}} \rightarrow \textit{DATI}_{\perp} \\
+    &\textbf{dove } C(P,x) \textbf{ è la funzione calcolata da $P$}
+\end{split}
+\end{displaymath}
+$P$ è un oggetto semantico/rappresentazione, se faccio girare ho una funzione.
+\paragraph{Potenza computazionale di $C$}
+\begin{displaymath}
+\begin{split}
+    &F(C)= \{ C(P,_): P \in \textit{PROG}\} \subseteq \textit{DATI}_{\perp}^{\textit{DATI}}\\
+    &F(C) = \textit{DATI}_{\perp}^{\textit{DATI}} \Rightarrow \textbf{ informatica può tutto}\\
+    &F(C) \subsetneq \textit{DATI}_{\perp}^{\textit{DATI}} \Rightarrow \textbf{ esistono compiti non automatizzabili}
+\end{split}
+\end{displaymath}
+\paragraph{Cardinalità}
+Indichiamo con $|A|$ il numero di elementi di $A$. Ha senso però solo su insiemi infiniti. Infatti $|\mathbb{N}| = \inf = |\mathbb{R}|$ risultano equinumerosi, che me ne faccio? In realtà, l'infinito di $\mathbb{N}|$ è meno fitto di quello di $|\mathbb{R}$.
+\paragraph{Relazione}
+Relazione binaria su $A:R \subseteq A^2$. Elementi $a,b \in A$ sono nella relazione $R$ sse $(a,b) \in R$ che si può anche indicare con $aRb$.
+
+\noindent
+Relazione di equivalenza sse:
+\begin{itemize}
+    \item Riflessiva, $\forall a: aRa$
+    \item Simmetrica, $\forall a,b: aRb=bRa$
+    \item Transitiva, $aRb \wedge bRc \rightarrow aRc$
+\end{itemize}
+\paragraph{Relazioni di equivalenza e partizioni}
+$A:R \subseteq A^2$ induce partizione su $A \Rightarrow A_1, A_2, \dots \subseteq A$ t.c.
+\begin{itemize}
+    \item $A_i \neq \varnothing$;
+    \item $i \neq j \Rightarrow A_i \cap A_j = \varnothing$;
+    \item $\cup_{i \in I} A_i = A$.
+\end{itemize}
+Data $a \in A$ la sua classe di equivalenza è $[a]_R=\{b \in A_i: aRb\}$.
+
+
+\noindent
+Si dimostra che:
+\begin{itemize}
+    \item Non esistono classi di equivalenza vuote (per riflessività ho almeno dentro me stesso);
+    \item dati $a,b \in A \Rightarrow [a]_R \cap [b]_R = \varnothing \textbf{ o } [a]_R = [b]_R$
+    \item $\cup_{a \in A}[a]_R = A$
+\end{itemize}
+
+L'insieme delle classi di equivalenza spezzetta $A$. L'insieme $A$ visto come partizioni è detto quoziente di $A$ rispetto a $R$ e si indica con $A/R$.
+
+\paragraph{Cardinalità di insiemi}
+Sia $U$ la classe di tutti gli insiemi. Definisco $ \sim  \subseteq U^2$ come $A \sim B$ sse esiste biezione tra $A$ e $B$ (associazione 1 a 1 tra elementi di $A$ e $B$).
+
+
+\noindent
+Propietà di $ \sim $:
+\begin{itemize}
+    \item riflessiva (uso funzione identità di $A$ ($i_A$));
+    \item simmetrica: se $A \sim B$ allora $B \sim A$ con la funzione inversa (con biezione esiste per forza);    \item transitiva: composizione di biettiva è biettiva.
+\end{itemize}
+
+Se $A \sim B$ i due insiemi sono equinumerosi. Un insieme si dice numerabile sse $A \sim \mathbb{N}$. 
+
+\section{Lezione 3}
+Definiamo un insieme non numerabile un insieme a cardinalità infinita ma non "listabili esaustivamente" come $\mathbb{N}$, sono più fitti e se provo a listare mi perdo qualche elemento.
+\subsection{$\mathbb{R}$ non è numerabile}
+Proviamo a dimostrare che non c'è biezione tra $\mathbb{N}$ e $\mathbb{R}$:
+\begin{enumerate}
+	\item dimostro che $\mathbb{R} \sim [0,1]$, ovvero che $[0,1]$ è fitto come $\mathbb{R}$;
+	\item dimostro che $\mathbb{N} \cancel{\sim} [0,1]$
+	\item $\mathbb{N} \cancel{\sim} [0,1] \Rightarrow \mathbb{N} \cancel{\sim} \mathbb{R}$
+\end{enumerate}
+\paragraph{$\mathbb{R} \sim [0,1]$}
+\begin{itemize}
+	\item scelgo un punto su $[0,1]$
+	\item proietto sulla semicirconferenza centrata in $\frac{1}{2}$
+	\item traccio linea tra $\frac{1}{2}$ e il punto proiettato
+\end{itemize}
+La funzione è iniettiva in quanto ogni punto crea un punto diverso (cambia l'angolo); è anche suriettiva tramite l'operazione inversa. Possiamo quindi dire che $\mathbb{R} \sim [0,1]$.
+
+\paragraph{$\mathbb{N} \cancel{\sim} [0,1]$}
+Dimostrazione per assurdo: $\mathbb{N} {\sim} [0,1]$, quindi $[0,1]$ è listabile.
+\begin{displaymath}
+\begin{matrix}
+0. & \underline{a_{11}} & a_{12} & a_{13} & a_{14} & \dots \\
+0. & a_{21} & \underline{a_{22}} & a_{23} & a_{24} & \dots \\
+0. & a_{31} & a_{32} & \underline{a_{33}} & a_{34} & \dots \\
+0. & a_{41} & a_{42} & a_{43} & \underline{a_{44}} & \dots \\
+\dots & \dots & \dots & \dots  & \dots & \dots
+\end{matrix}
+\end{displaymath}
+$1$ posso sciverso come $0.\overline{9}$. Costruiamo ora $0, c_{1},c_{2},\dots,c_{i},\dots$.
+\begin{displaymath}
+c_i=
+\begin{cases}
+	a_{ii}+1 \text{ se } a_{ii} < 9 \\
+	a_{ii}-1 \text{ se } a_{ii} = 9 
+\end{cases}
+\end{displaymath}
+
+$c$ non è nessuno della lista perchè differisce per la $i$-esima componente, differisce dal primo perchè $c_1 \neq a_{11}$, dal secondo perchè $c_2 \neq a_{2}$ e così via.
+Possiamo quindi dire che $\mathbb{N} \cancel{\sim} [0,1]$.
+
+
+\noindent
+Quindi $\mathbb{N} \cancel{\sim} \mathbb{R}$, di conseguenza $\mathbb{R}$ non è numerabile ed è un'insieme continuo: tutti gli insiemi equinumerosi a $\mathbb{R}$ si dicono insiemi continui.
+
+
+\paragraph{Insieme delle parti di $\mathbb{N}$}
+$P(\mathbb{N}$ = {sottoinsiemi di $\mathbb{N}$} $\cancel{\sim}$ dimostrato per diagonalizzazione.
+Creo elenco di sottoinsiemi e trovo un sottoinsime di $\mathbb{N}$ che non c'è nell'elenco.
+\begin{displaymath}
+	\begin{split}
+		& \mathbb{N} \Rightarrow \textbf{ 1 2 3 4 5 6 } \dots \\
+		& A          \Rightarrow \textbf{ 1 1 0 1 1 0 } \dots \\
+		&\textbf{dove } 1 \Rightarrow \in A \textbf{ e } 0 \Rightarrow \cancel{\in} A
+	\end{split}	
+\end{displaymath}
+Per assurdo $P(\mathbb{N} \sim \mathbb{N} \Rightarrow$ listo esaustivamente
+\begin{displaymath}
+\begin{matrix}
+\underline{b_{01}} & b_{11} & b_{21} & b_{31} & \dots \\
+{b_{02}} & \underline{b_{12}} & b_{22} & b_{32} & \dots \\
+{b_{03}} & b_{13} & \underline{b_{23}} & b_{33} & \dots \\
+\dots & \dots & \dots & \dots  & \dots
+\end{matrix}
+\end{displaymath}
+
+Considero ora il sottoinsieme di $\mathbb{N}$ rappresentato dal vettore $\overline{b_{01}} \overline{b_{12}} \overline{b_{23}} \dots$ dove overline rappresenta il negato. Questo vettore è un sottoinsimeme di $P(\mathbb{N}$ che non appartiene a $\mathbb{N}$.
+
+\paragraph{$\mathbb{N}^{\mathbb{N}}$}
+Insieme non numerabile $\mathbb{N}^{\mathbb{N}} = \{ f:\mathbb{N}\rightarrow \mathbb{N} \}$.
+
+
+\noindent
+Anche in questo caso procedo per diagonalizzazione per ipotesi assurda. Metto sulle colonne i valori di $N$ e sulle righe le funzioni.
+\begin{displaymath}
+\begin{matrix}
+\underline{f_0(0)} & f_0(1) & f_0(2) & f_0(3) & \dots \\
+f_1(0) & \underline{f_1(1)} & f_1(2) & f_1(3) & \dots \\
+f_2(0) & f_2(1) & \underline{f_2(2)} & f_2(3) & \dots \\
+\dots & \dots & \dots & \dots  & \dots
+\end{matrix}
+\end{displaymath}
+Definisco $\phi: \mathbb{N} \rightarrow \mathbb{N}$ con $\phi(n)=f_n(n)+1$. $\phi \in \mathbb{N}^{\mathbb{N}}$ e dovrebbe stare nella lista esaustima ma non c'è quindi è un insieme continuo come l'insime delle parti di $\mathbb{N}$.
+
+\subsection{Cosa è calcolabile?}
+Considerazioni ragionevoli:
+\begin{itemize}
+	\item $\textit{PROG} \sim \mathbb{N}$, cosidero la digitalizzazione di un programma, è un numero espresso in binario
+	\item $\textit{DATI} \sim \mathbb{N}$, come sopra
+\end{itemize}
+Quindi $F(C) \sim \textit{PROG} \sim \mathbb{N} \cancel{\sim} \mathbb{N}^{\mathbb{N}}_{\perp} \sim \textit{DATI}^{\textit{DATI}}_{\perp}$. Esistono funzioni non calcolabili, pochi programmi e tante funzioni.
+
+\section{Lezione 4}
+\subsection{$\textit{Dati} \sim \mathbb{N}$}
+Forniamo una legge che:
+\begin{itemize}
+	\item associ biunivocamente dati a numeri e viceversa;
+	\item consente di operare direttamente per operare sui corrispettivi dati;
+	che ci consenta di dire, senza perdita di generalizzazione, che i nostri programmi lavorano sui numeri.
+\end{itemize}
+Per fare ciò, passiamo attraverso un risultato matematico sulla cardinalità di insiemi. $ \mathbb{N} \times \mathbb{N} \underline{\sim} \mathbb{N}^{+} \Rightarrow \mathbb{N} \times \mathbb{N} {\sim} \mathbb{N}$, da cui si può ottenere $ \mathbb{Q} \sim \mathbb{N} $ consierando che possiamo vedere le frazioni $ \in \mathbb{Q} $ come coppie di numeratore e denominatore ovvero $ \mathbb{N} \times \mathbb{N} $.
+\paragraph{Funzione coppia di Cantor}
+Definiamo $ <  ,  > : \mathbb{N} \times \mathbb{N} \rightarrow \mathbb{N}^{+} $ iniettiva e suriettiva. Abbiamo $<x,y>=n$ con $\textit{sin}: \mathbb{N}^{+} \rightarrow \mathbb{N}$ e $\textit{des}: \mathbb{N}^{+} \rightarrow \mathbb{N}$. Per il "ritorno" abbiamo quindi che $\textit{sin}(n)=x$ e $\textit{des}(n)=y$.
+
+
+Consideriamo una rappresentazione grafica come in Tabella \ref{cantor}, riempita con i numeri $\in \mathbb{N}^{+}$ seguendo la diagonale. Cantor è iniettiva perchè le coordinate di punti diverse individuano celle diverse che vengono riempite successivamente; suriettiva perchè riempio fino all' $n$ voluto e guardo immmagine $<x,y>$ corrispondente.
+Per esempio $ <2,1>=8 $.
+\begin{center}
+\begin{table}[]
+\label{cantor}
+\caption{Rappresentazione delle coppie di Cantor}
+\begin{center}
+
+\begin{tabular}{ll|llll}
+\cline{3-6}
+                                         &                        & \multicolumn{4}{c|}{y}                                                                            \\ \cline{3-6} 
+                                         &                        & \multicolumn{1}{c|}{0} & \multicolumn{1}{l|}{1} & \multicolumn{1}{l|}{2} & \multicolumn{1}{l|}{3} \\ \hline
+\multicolumn{1}{|l|}{\multirow{4}{*}{x}} & \multicolumn{1}{c|}{0} & 1                      & 3                      & 6                      & 10                     \\ \cline{2-2}
+\multicolumn{1}{|l|}{}                   & 1                      & 2                      & 5                      & 9                      &                        \\ \cline{2-2}
+\multicolumn{1}{|l|}{}                   & 2                      & 4                      & 8                      &                        &                        \\ \cline{2-2}
+\multicolumn{1}{|l|}{}                   & 3                      & 7                      &                        &                        &                        \\ \cline{1-2}
+\end{tabular}
+\end{center}
+
+\end{table}
+\end{center}
+
+\paragraph{Forma analitica di Cantor}
+Come vediamo nella Tabella \ref{cantoranal} troviamo il valore della coppia $ <x,y> $ sulla diagonale che inizia in $ <x+y,0 >$.
+\begin{enumerate}
+	\item $ <x,y>=<x+y,0>+y $
+	\item trovo la coppia $<z,0> =  \sum\limits_{i=1}^z \frac{z(z+1)}{2} + 1$
+\end{enumerate}
+Il punto 2 è dato dal fatto che un generico valore nella colonna $0$ è dato dalla somma degli indici fino a quello cercato $+1$, vediamo per esempio nella Tabella \ref{cantor} che il valore $7$ nella riga $3$ è calcolabile come $3+2+1+0$ a cui aggiungiamo ancora $1$.
+Unendo i due punti troviamo che 
+\begin{displaymath}
+ <x,y>=<x+y,0> + y = \frac{(x+y)(x+y+1)}{1} + y + 1.
+\end{displaymath}
+
+\begin{table}[]
+\label{cantoranal}
+\caption{Rappresentazione analitica di cantor, la coppia $<x,y>$ si trova sulla diagonale della riga $x+y$}
+\begin{center}
+
+\begin{tabular}{ll|llll}
+\cline{3-6}
+                                         &                        & \multicolumn{4}{c|}{y}                                                                                                \\ \cline{3-6} 
+                                         &                        & \multicolumn{1}{c|}{$\dots$} & \multicolumn{1}{l|}{$\dots$} & \multicolumn{1}{l|}{$y$} & \multicolumn{1}{l|}{$\dots$} \\ \hline
+\multicolumn{1}{|l|}{\multirow{4}{*}{x}} & \multicolumn{1}{c|}{$x$} & $\dots$                      & $\dots$                      & $<x,y>$                  &                              \\ \cline{2-2}
+\multicolumn{1}{|l|}{}                   & $\dots$                &                              & $\dots$                      &                          &                              \\ \cline{2-2}
+\multicolumn{1}{|l|}{}                   & $x+y$                  & $\dots$                      &                              &                          &                              \\ \cline{2-2}
+\multicolumn{1}{|l|}{}                   & $\dots$                &                              &                              &                          &                              \\ \cline{1-2}
+\end{tabular}
+\end{center}
+\end{table}
+
+\paragraph{Come tornare a $\mathbb{N}^{+}$ e $\mathbb{N}^{+}$}
+Vogliamo capire come trovare sinistra e destra partendo da $n$.
+\begin{enumerate}
+	\item trovare le coordinate $<\gamma,0> $ del punto inizale della diagonale dove si trova $n$;
+	\item $y = n - <\gamma, 0>$ e $x= \gamma -y$,
+\end{enumerate}
+
+Per il punto 1 possiamo dire che $\gamma = \textit{max} \{ z \in \mathbb{N} : <z,0> \leq n \} $, quindi
+
+\begin{displaymath}
+	\begin{split}
+	& <z,0> \leq n \Rightarrow \frac{z(z+1)}{2}+1 \leq n \\ 
+	& \Rightarrow z^2 +z+2-2n \leq 0 \Rightarrow^{\textit{eq 2° grado}} \\
+	& \Rightarrow z_{1,2}=\frac{-1 \mp \sqrt{8n-7} }{2} \Rightarrow^{\textit{solo $\leq$ 0}} \\
+	& \Rightarrow  \frac{-1 - \sqrt{8n-7} }{2} \leq z \leq \frac{-1 + \sqrt{8n-7} }{2} \\
+	& \Rightarrow^{\textit{intero più grande}} \Rightarrow \gamma = \lfloor \frac{-1 + \sqrt{8n-7} }{2} \rfloor;
+	\end{split}
+\end{displaymath}
+ troviamo infine che $ \textit{des}(n)=y=n-<\gamma,0> $ e $\textit{sin}(n)=x=\gamma-y$.
+ 
+ 
+ Abbiamo quindi dimostrato $ \mathbb{N} \times \mathbb{N} \sim \mathbb{N}^{+} $, per dimostrare $ \mathbb{N} \times \mathbb{N} \sim \mathbb{N} $ basta semplicentente definire una nuova funzione, ovvero
+ 
+ \begin{displaymath}
+ 	[,]: \mathbb{N} \times \mathbb{N} \sim \mathbb{N} \textbf{ t.c. } [x,y] = <x,y> -1
+ \end{displaymath}
+ e possiamo notare che ${,}$ mostra che $\mathbb{Q}$ è numerabile.
+ 
+ \subsubsection{$\textit{DATI} \underline{\sim} \mathbb{N}$}
+\paragraph{Liste di interi}
+Codifichiamo $x_1, \dots, x_n$ in $<x_1, \dots, x_n>$. Ricordiamo che le liste non hanno lunghezza nota, quindi metto uno $0$ a fine lista per capire che sono arrivato alla fine.
+
+
+Codifica: $1,2,5 \Rightarrow <1,2,5,0> \Rightarrow <1,<2,<5,0>>> \Rightarrow <1,<2,16> \Rightarrow <1,188> \Rightarrow 18144$.
+
+
+
+Decodifica: Creo albero a partire da $n$, a sinistra troverò i vari $x$ ordinati con in cima quello di indice inferiore e a destra o un sottoalbero o uno $0$. Quando trovo $0$ a destra mi fermo.
+Un esempio è mostrato in Figura \ref{declista}.
+
+\begin{figure}
+\label{declista}
+\caption{Decodifica lista}
+\begin{center}
+\includegraphics[scale=0.7]{"img/declista.png"}
+\end{center}
+\end{figure}
+
+\paragraph{Strutture dati derivanti}
+
+
+Array(lunghezza nota):
+\begin{displaymath}
+	x_1, \dots, x_n \Rightarrow [x_1, \dots, x_n] = [x_1, \dots, [x_{n-1}, x_n]] \dots ]
+\end{displaymath}
+
+Matrici:
+\begin{displaymath}
+\begin{matrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{matrix}
+\Rightarrow
+\begin{bmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{bmatrix}
+\Rightarrow
+[[a_{11}, a_{12}], [a_{11}, a_{12}]]
+\end{displaymath}
+
+Grafi: utilizzando le liste di adiacenza o le matrici di adiacenza.
+
+\section{Lezione 5}
+
+
+
+
+
+
+
+
+
+
+\end{document}

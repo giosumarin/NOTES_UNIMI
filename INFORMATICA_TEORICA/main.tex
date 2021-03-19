@@ -5,6 +5,7 @@
 \usepackage{cancel}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{forest}
 
 
 \title{INFORMATICA TEORICA}
@@ -434,9 +435,159 @@ a_{21} & a_{22}
 Grafi: utilizzando le liste di adiacenza o le matrici di adiacenza.
 
 \section{Lezione 5}
+Sistema di calcolo $\textit{RAM}$: macchina $\textit{RAM}$ + linguaggio $\textit{RAM}$ (assembly semplificato). Consente di definire rigorosamente:
+\begin{itemize}
+	\item $\textit{PROG} \sim \mathbb{N}$
+	\item $C(P, \_) \textit{RAM}(P, \_) $, semantica dei programmi
+	\item $F(\textit{RAM})$, potenza computazionale
+\end{itemize}
+
+Forse l'idea di potenza computazionale fornita in prima istanza ($F(\textit{RAM})$ è stringente in quando la macchina $\textit{RAM}$ è molto semplice, successivamente introdurremo la macchina $\textit{WHILE}$ (JVM) e comfronteremo le loro potenze computazionali. Se avremo $F(\_)$:
+\begin{itemize}
+	\item diverse $\Rightarrow$ ciò che è computabile dipende dallo strumento
+	\item uguale $\Rightarrow$ computabilità (tesi di Church)? posso calcosare stessi insiemi di funzioni?
+\end{itemize}
+
+\paragraph{Sistema di calcolo $\textit{RAM}$}
+La macchina $\textit{RAM}$ è composta da:
+\begin{itemize}
+	\item $L$, program counter, indica indirizzo della prossima istruzione da eseguire;
+	\item $P$, programmma, formato da istruzioni;
+	\item $R$, memoria, insieme di registri e ogni cella può contenere un numero $\in \mathbb{N}$, dove $R_1$ contiene l'inpur e $R_0$ l'output.
+\end{itemize}
 
 
 
+La terminazione è data da $L=0$. 
+
+
+
+Output: $\phi_P(x)=\textit{contenuto}(R_o)$ o $\perp$ in caso di loop, indichiamo con $\phi_P$ la semantica di $P$.
+
+\paragraph{Linguaggio $\textit{RAM}$}
+\begin{itemize}
+	\item $R_k \leftarrow R_{k} + 1 $
+	\item $R_k \leftarrow R_{k} \dot{-} 1; x \dot{-} y = x-y \textit{ if } x \geq y \textit{ else } 0$
+	\item $\textit{if } R_k=0 \textit{ then goto } m; m=\{1, |P| \}; |P|=\textit{numero di istruzioni di } P $
+\end{itemize}
+
+\paragraph{Semantica Operazionale}
+Ovvero specificare il significato di ogni istruzione, e quindi dei programmi, specificando l'effetto che quell'istruzione ha sui registri della macchina.
+
+
+Come descrivo l'effetto di un'istruzione? $S$=Stato=foto della macchina. Prendo $S$ prima e dopo l'esecuzione di un'istruzione.
+$S_{\textit{init}}, S_1, S_{\textit{fin}}$, $P$ induce una sequenza di stati.
+
+
+
+La semantica di $P$:
+\begin{displaymath}
+	\phi_{P} =
+	\begin{cases}
+		&y \textit{ se finisce} \\
+		&\perp \textit{ altrimenti}
+	\end{cases}
+\end{displaymath}
+
+
+\subsection{Ingredienti della definizione formale di semantica}
+\paragraph{Stato}
+\begin{displaymath}
+	\begin{split}
+	& S:\{L,R\} \rightarrow \mathbb{N} \\
+	& \textit{Stati} = \mathbb{N}^{\{L,R\}} \\
+	& S(R_k): \textit{contenuto del registro $R_k$ quando la macchina è nello stato $S$} \\
+	& \textit{stato finale}: S(L)=0 \Rightarrow \textbf{HALT} \\
+	& \textit{dato}: \mathbb{N} (infatti \textit{DATI} \sim \mathbb{N})
+	\end{split}
+\end{displaymath}
+
+
+\paragraph{Inizializzazione}
+Dato il dato $n$ prepara la macchina nello stato iniziale:
+\begin{itemize}
+	\item $S_{\textit{init}}(L)=1$
+	\item $S_{\textit{init}}(R_1)=n$
+	\item $\forall i \neq 1 : S_{\textit{init}}(R_i)=0$
+\end{itemize}
+
+\paragraph{Programmi}
+	$PROG=\{\textit{programmi RAM}\}, P \in PROG; |P|= \#\textit{istrizioni}$
+	
+\paragraph{Esecuzione}
+Dinamica del programma $\Rightarrow$ funzione stato prossimo.
+
+
+
+$\sigma: \textit{stati} \times \textit{PROG} \rightarrow \textit{stati}_{\perp}$; $\sigma(S,P)=S'$
+
+
+
+Lo stato che segue lo stato $S$ dopo l'eesecuzione di un'istruzione di $P$:
+\begin{itemize}
+	\item dipende dall'istruzione che devo eseguire
+	\item l'istruzione dipende da $S(L)$
+\end{itemize}
+
+\begin{enumerate}
+	\item se $S(L)=0$ allora $S'=\perp$
+	\item se $S(L) > |P|$ allora $S'(L)=0$ e $\forall i: S'(R_i)=S(R_i)$
+	\item se $1 \leq S(L) \leq |P|$: considero l'istruzione $S(L)-esima$:
+		\begin{itemize}
+			\item $R_k \leftarrow R_k +/\dot{-}1$:
+			\begin{itemize}
+				\item $S'(R_k)=S(R_k) +/\dot{-}1$
+				\item $S'(L)=S(L)+1$
+				\item $\forall i \neq k: S'(R_i)=S(R_i)$
+			\end{itemize}
+			\item $\textit{if } R_k=0 \textit{ then goto }m$:
+			\begin{itemize}
+				\item $S'(R_i)=S(R_i)$
+				\item $S'(L)=m \textit{ if } S(R_k)==0 \textit{ else } S(L)+1$
+				
+			\end{itemize}
+			
+		\end{itemize}
+\end{enumerate}
+\paragraph{Semantica di $P$}
+
+\begin{displaymath}
+	\begin{split}
+		&\phi_P:\mathbb{N} \rightarrow \mathbb{N}_{\perp} \\
+		&\phi_P(n) = 
+		\begin{cases}
+			&y \textit{ se } S_m(L)=0 \textit{ e } S_m(R_0)=y \\
+			&\perp \textit{se va in loop}
+		\end{cases}
+	\end{split}
+\end{displaymath}
+\paragraph{Potenza computazionale di $\textit{RAM}$}
+$F(\textit{RAM}=\{f \in \mathbb{N}^{\mathbb{N}}_{\perp}: \exists P \in \textit{PROG}, \phi_P=f\} = \{ \phi_{P}:P \in \textit{PROG} \} \subseteq \mathbb{N}^{\mathbb{N}}_{\perp}$.
+
+
+
+Incluso stretto per intuizione.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Lezione 6}
+%ALBERI
+\begin{forest}
+[S
+[S1]
+]
+\end{forest}
 
 
 

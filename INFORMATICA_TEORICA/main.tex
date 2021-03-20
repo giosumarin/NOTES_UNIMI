@@ -582,16 +582,135 @@ Incluso stretto per intuizione.
 
 
 \section{Lezione 6}
-%ALBERI
+\subsection{$\textit{PROG} \sim \mathbb{N}$ su programmi \textit{RAM}}
+\paragraph{Come codificare programmi in numeri e ritorno biunivocamente}
+Applichiamo a ogni istruzione del programma un'aritmetizzazione e poi uniamo i vari numeri generati per creare un singolo numero tramite la codifica utilizzata con la lista di numeri + Cantor.
+Per il ritorno, sappiamo decodificare la lista finale; se l'aritmetizzazione (\textit{Ar}) è invertibile allora da $n$ posso ricostruire univocamente il sorgente.
+
+
+
+Ci MAnca solo il passaggio fatto da \textit{Ar}: da istruzioni a numeri e viceversa. Questo passaggio si dice aritmetizzare o godelizzare.
+\subsection{Come aritmetizzare?}
+\begin{displaymath}
+	\begin{split}
+		&\textit{Ar}: \textit{istruzione} \rightarrow \mathbb{N} \textit{ t.c. } \textit{Ar}(\textit{istr}=n) \leftrightarrow \textit{Ar}^{-1}(n)=\textit{istr} \\
+		&\textit{Ar}(R_k \leftarrow R_k + 1)=3k \\
+		&\textit{Ar}(R_k \leftarrow R_k \dot{-} 1)=3k+1 \\
+		&\textit{Ar}(\textit{if }R_k = 0 \textit{ then goto }m =3<k,m>-1 \textit{ come fare +2} 
+	\end{split}
+\end{displaymath}
+\paragraph{Com'è fatto $\textit{Ar}^{-1}$}
+Utilizzo il resto della divisione per 3, quindi $||n||_3$ ($n$ modulo 3):
+\begin{itemize}
+	\item 0: $n=3k \Rightarrow R_{\frac{n}{3}} \leftarrow R_{\frac{n}{3}}+1$;
+	\item 1: $n=3k+1 \Rightarrow R_{\frac{n-1}{3}} \leftarrow R_{\frac{n-1}{3}}\dot{-}1$;
+	\item 2: $n=<k,m>-1 \Rightarrow <k,m>=\frac{n+1}{3} \Rightarrow \textit{if } R_{\textit{sin}\frac{n+1}{3}} = 0 \textit{ then goto } R_{\textit{des}\frac{n+1}{3}}$.
+\end{itemize}
+\paragraph{Da programmi a numeri}
+$\textit{cod}(P)=<\textit{Ar}(\textit{istr}_1), \dots, \textit{Ar}(\textit{istr}_m)>$
+\paragraph{Da numeri a programmi}
+Come la decodifica destro/sinistro con le parti sinistra che "subiscono" $\textit{Ar}^{-1}$, anche in questo caso ci fermiamo quando troviamo lo $0$ nel lato destro.
+\paragraph{Osservazioni}
+\begin{itemize}
+	\item i numero diventano linguaggio di programmazione;
+	\item potrei scrivere $F(\textit{RAM})= \{\phi_{P}:P \in \textit{PROG}\}$ come $F(\textit{RAM})= \{ \phi_i \}_{i \in \mathbb{N}}$;
+	\item per il sistema \textit{RAM} si ha rigorosamente $F(\textit{RAM}) \sim \mathbb{N} \cancel{\sim} \mathbb{N}^{\mathbb{N}}_{\perp}$, quindi alcuni problemi non sono automatizzabili;
+	\item forse, cosiderando un sistem adi calcolo $C$ più soffisticato ma comunque rigorosamente trattabile come \textit{RAM}, potremmo dare un'idea formale di "ciò che è calcolabile automaticamente" come $F(C)$ che sia più ampia di $F(\textit{RAM})$;
+	\item se dimostriamo  che $F(C)=F(\textit{RAM})$ allora cambiare tecnologia non cambia ciò che è calcolabile $\Rightarrow$ la calcolabilità è intrinseca ai problemi: perchè non catturarla matematicamente? (no macchine, no linguaggio, ...).
+\end{itemize}
+
+\subsection{Sistema di calcolo \textit{WHILE}}
+Memoria $x_0, \dots, x_20$ con $x_0$ output e $x_1$ input. Le variabili contengono numeri arbitrariamente grandi e di conseguenza in una singola variabile posso salvare, per esempio con Cator, più di un semplice numero.
+
+
+
+Non abbiamo un program counter in quanto il linguaggio \textit{WHILE} è strutturato.
+
+\paragraph{Linguaggio \textit{WHILE}}
+Sintassi induttiva: ho delle fasi semplici, con passi induttivi faccio cose più complicate.
+\begin{itemize}
+	\item $[BASE]$: comando assegnamento: $x_k=0$, $x_k=x_j+1$, $x_k=x_j\dot{-}1$; 
+	\item $[PASSI]$: comando while: while $x_k \neq 0$ do $C$, con $C$ che può essere:
+		\begin{itemize}
+			\item comando di assegnamento
+			\item comando while
+			\item comando composto
+		\end{itemize}
+	\item $[PASSI]$: comando composto: $\underline{\textit{BEGIN}}$ $ C_1, \dots, C_m $ $\underline{\textit{END}}$, con $C$ come sopra.
+\end{itemize}
+
+Possiamo quindi dire che un programma \textit{WHILE} è un comando composto.
+
+
+$w-\textit{PROG} = \{ \textit{programmi WHILE} \} \leftarrow$ costruiti induttivamente.
+
+
+Semantica di $w$: $\psi_w:\mathbb{N}\rightarrow\mathbb{N}$
+
+
+\paragraph{$w-\textit{PROG}$} Per dimostrare una proposizione su $w-\textit{PROG}$:
+\begin{enumerate}
+	\item dimostro proposizione sugli assegnamenti;
+	\item suppongo proposizione su $C$ e la dimostro su $while x_k \neq 0 do C$;
+	\item suppongo vera la proposizione su $C_1, \dots, C_m$ e la dimostro su $\underline{\textit{BEGIN}}$ $ C_1, \dots, C_m$ $ \underline{\textit{END}}$.
+\end{enumerate}
+\subsubsection{Dimostrazioni induttive su alberi bianri}
+\begin{center}
 \begin{forest}
-[S
-[S1]
+[$\bullet$
+	[$\bullet$
+		[$\bullet$]
+		[$\bullet$[$\bullet$][$\bullet$]]]
+	[$\bullet$]
 ]
 \end{forest}
+\end{center}
+Dividiamo i nodi in nodi interni e foglie.
+\begin{enumerate}
+	\item $[BASE]$: $\bullet$ è un albero binario
+	\item $[PASSO]$: se $T_1$ e $T_2$ sono alberi binari allora 
+	\begin{forest}
+[$\bullet$
+	[$T_1$]
+	[$T_2$]
+]
+\end{forest}
+è un albero binario
+\item nient'altro è un albero binario
+\end{enumerate}
 
+\paragraph{su ogni albero binario, il numero di nodi interni è minore di 1 rispetto alle foglie = P}
+Per induzione:
+\begin{enumerate}
+	\item $[BASE]$: $\bullet$, 1 foglia e 0 nodi interni $\Rightarrow$ \textbf{VERO}
+	\item $[PASupongo veroSO]$: suppongo vero P su $T_1$ e $T_2$, ovvero suppongo vero:
+		\begin{itemize}
+			\item $T_1$: foglie $F_1$, nodi interni $F_1-1$
+			\item $T_2$: foglie $F_2$, nodi interni $F_2-1$	
+		\end{itemize}
+\end{enumerate}
+Dimostro vero P per:
+\begin{forest}
+[$\bullet$
+	[$T_1$]
+	[$T_2$]
+]
+\end{forest}
+ovvero $F_1+F_2$ foglie, e $F_1-1+F_2-1+1=F_1+F_2-1$ nodi interni $\Rightarrow$ \textbf{VERO}
 
+\paragraph{Depth}
+\begin{enumerate}
+	\item $[BASE]$: $depth(\bullet)= 0$
+	\item $[BASE]$: $depth($\begin{forest}
+[$\bullet$
+	[$T_1$]
+	[$T_2$]
+]
+\end{forest}$)= 1+max(depth(T_1)+depth(T_2))$
 
+\end{enumerate}
 
+\section{Lezione 7}
 
 
 

@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{cancel}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{forest}
+%\usepackage{imakeidx}
+
+
+
+\title{STATISTICAL METHODS \\FOR MACHINE LEARNING}
+\author{giosumarin}
+\date{March 2021}
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\section{Lezione 1}
+\begin{itemize}
+	\item clustering: raggruppare punti in accordo alla loro similarità (raggruppare clienti per soldi spesi);
+	\item classification: predirre label semantiche associate ai data points (classificare documenti per argomento);
+	\item planning: vogliamo decidere una sequenza di azioni che devono essere fatte per raggiungere un goal (robot che va da quache parte con ostacoli sul percorso o guida autonoma).
+	\item supervised learning: abbiamo laber per degli esempi e imparo a classificare d questi
+	\item unsupervised learning: clustering (label "attaccata" ai data points)
+\end{itemize}
+
+\subsection{Label set}
+\begin{itemize}
+	\item $Y$ label set
+	\item news classification: $Y$=\{sport, politica, business, $\dots$\}
+	\item predizione stock price: $Y \in \mathbb{R}$
+	\item classification/categorization: $Y$ insieme finito di simboli, $\hat{y} \overset{?}{=}y$, con $\hat{y}$ predizione e $y$ valore reale;
+	\item regression: $Y \in \mathbb{R}$, $|\hat{y}-y|$.
+\end{itemize}
+
+\subsection{Loss function}
+\begin{displaymath}
+	\begin{split}
+		&l(y, \hat{y})=\begin{cases}
+			&0 \textit{ se } y= \hat{y}\\
+			&1 \textit{ altrimenti}
+		\end{cases}\\
+		&Y=\{ \textit{spam (positivo)}, \textit{nonspam (negativo)} \}, \textit{binary classification problem} \\
+		&l(y, \hat{y})=\begin{cases}
+			&2 \textit{ se } y= \textit{nonspam e }\hat{y} = \textit{spam} \leftarrow \textit{ falso positivo} \\
+			&1 \textit{ se } y= \textit{spam e }\hat{y} = \textit{nonspam} \leftarrow \textit{ falso positivo} \\
+			&0 \textit{ altrimenti}						
+		\end{cases} \\
+		&\textit{absolute loss (per regressione): } l(y, \hat{y})= |\hat{y}-y| \\ 
+		&\textit{square loss (per regressione): } l(y, \hat{y})= (\hat{y}-y)^2 \\
+		& \\
+		&\textit{[ESEMPIO] previsioni meteo: }Y=\{ \textit{pioggia}, \textit{asciutto} \}\\ 
+		&\hat{y}=\textit{probabilità assegnata a pioggia}; \textit{ prediction set: } Z=\{0,1\} \\
+		&l(y, \hat{y})=|\hat{y}-y| \\
+		&l(y, \hat{y}) = \begin{cases}
+				&\ln \frac{1}{\hat{y}} \textit{ se } y=1 \\
+				&\ln \frac{1}{1-\hat{y}} \textit{ se } y=0 \\
+			\end{cases}
+	\end{split}
+\end{displaymath}
+La loss logaritmica ha le seguenti proprietà:
+\begin{itemize}
+	\item $\lim\limits_{\hat{y}\rightarrow 0^+}l(1,\hat{y})=\infty$
+	\item $\lim\limits_{\hat{y}\rightarrow 1^-}l(0,\hat{y})=\infty$
+\end{itemize} 
+
+\section{Lezione 2}
+\subsection{Data Points}
+$X$ dominio dati, $x$ spesso è codificato convenientemente come vettore di numeri attravero per esempio la one-hot encoding.
+\begin{displaymath}
+	X=
+	\begin{cases}
+		&\mathbb{R}^d \textit{ attributi numerici} \\
+		&X_1,\dots, X_d \textit{ attributi categorici}
+	\end{cases}
+\end{displaymath}
+Possiamo avere anche un mix di diversi attributi.
+
+\subsection{Predictor}
+Un predittore è una funzione che mappa data points in label
+\begin{displaymath}
+	\begin{split}
+		f: X \rightarrow Y, f: X \rightarrow \overline{Z}, \overline{Z} \neq Y 
+	\end{split}
+\end{displaymath}
+Dato un ponto $x$ abbiamo quindi
+\begin{displaymath}
+	\hat{y}=f(x).
+\end{displaymath}
+Quello che vogliore è avere una loss piccola per molti $x \in X$.
+\subsection{Supervised learning}
+Abbiamo le coppie $(x,y)$ con $x$ singolo data point e $y$ la sua rispettiva label. Le label possono essere soggettive (annotazioni umane) o ogettive (misurazioni di strumenti).
+\subsubsection{Training Set}
+Insieme di esempi su cui effettuiamo l'addestramento; abbiamo quindi un training set in input a un algoritrmo di apprendimento (con la sua loss) e che in output genera un predittore.
+\subsubsection{Test Set}
+Insieme di esempi ($\neq$ training set) su cui viene valutata la capacità di generalizzazione di un predittore addestrato sul training set.
+
+\subsubsection{Completo}
+Abbiamo il predittore $f$ uscente dall'algoritmo di apprendimento $A$ usando la funzione di loss $l$. Abbiamo il test set $(x_1',y_1'),\dots, (x_n',y_n')$, calcoliamo il nostro test error come
+\begin{displaymath}
+	\frac{1}{n} \sum\limits_t^n l(y_t', f(x_t')).
+\end{displaymath}  
+Il nostro goal è quello di sviluppare una teoria per guidare nel design di $A$ che ci genera predittori con un piccolo test error w.r.t. una loss function.
+\subsection{Empirical Risk Minimizer}
+Fisso un insieme $F$ di predittori e una loss function $f$. Entra quindi il training set ($S$) in questo ERM (che ha $F$ e $l$) e abbiamo in output
+\begin{displaymath}
+	\hat{f} \in arg\min\limits_{f \in F} \hat{l_S}(f).
+\end{displaymath}
+L'idea è di minimizzare il training error in una classe $F$ di predittori.
+Se $\min\limits_{f \in F} \frac{1}{n} \sum\limits_{t=1}^{n}l(y_t', f(x_t'))$ è grande siamo in un caso di \underline{underfitting}.
+\subsubsection{Esempio}
+Prendiamo $F$ grande e vediamo cosa succede.
+
+\begin{displaymath}
+	\begin{split}
+		&X= \{ x_1,\dots, x_5 \}, Y= \{ -1,1 \}, F \textit{ contiene tutti i classificatori binari} \\
+		&|F|=2^5=32, \exists f^* \textit{ t.c. } y_t=f^*(x_t) \textit{ con } t=\{ 1,\dots, 5 \}
+	\end{split}
+\end{displaymath}
+\begin{table}[]
+\begin{tabular}{l|ccccc}
+\cline{2-6}
+                            & \multicolumn{1}{c|}{$x_1$} & \multicolumn{1}{c|}{$x_2$} & \multicolumn{1}{c|}{$x_3$} & \multicolumn{1}{c|}{$x_4$} & \multicolumn{1}{c|}{$x_5$} \\ \hline
+\multicolumn{1}{|l|}{$f^*$} & -1                         & 1                          & 1                          & $f^*(x_4)$                 & $f^*(x_5)$                 \\ \cline{1-1}
+\multicolumn{1}{|l|}{$f^1$} & -1                         & 1                          & 1                          & 1                          & 1                          \\ \cline{1-1}
+\multicolumn{1}{|l|}{$f^2$} & -1                         & 1                          & 1                          & -1                         & 1                          \\ \cline{1-1}
+\multicolumn{1}{|l|}{$f^3$} & -1                         & 1                          & 1                          & 1                          & -1                         \\ \cline{1-1}
+\multicolumn{1}{|l|}{$f^4$} & -1                         & 1                          & 1                          & -1                         & -1                         \\ \cline{1-1}
+\end{tabular}
+\end{table}
+Se il training set è formato dai primi 3 data point tutti e 4 i predittori hanno lo stesso training error uguale a 0. In questo caso non possiamo decidere quale predittore usare. Chiamo questo caso \underline{overfitting}.
+
+
+
+Possiamo estrapolare la seguente regola da questo esempio (quando $F$ è finito):
+\begin{displaymath}
+	m \geq \log_2|F|
+\end{displaymath}
+
+\section{Lezione 3}
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

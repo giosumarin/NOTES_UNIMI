@@ -686,7 +686,7 @@ Dividiamo i nodi in nodi interni e foglie.
 Per induzione:
 \begin{enumerate}
 	\item $[BASE]$: $\bullet$, 1 foglia e 0 nodi interni $\Rightarrow$ \textbf{VERO}
-	\item $[PASupongo veroSO]$: suppongo vero P su $T_1$ e $T_2$, ovvero suppongo vero:
+	\item $[PASSO]$: suppongo vero P su $T_1$ e $T_2$, ovvero suppongo vero:
 		\begin{itemize}
 			\item $T_1$: foglie $F_1$, nodi interni $F_1-1$
 			\item $T_2$: foglie $F_2$, nodi interni $F_2-1$	
@@ -714,6 +714,131 @@ ovvero $F_1+F_2$ foglie, e $F_1-1+F_2-1+1=F_1+F_2-1$ nodi interni $\Rightarrow$ 
 \end{enumerate}
 
 \section{Lezione 7}
+\subsection{Esecuzione su una macchina WHILE (intuituvamente)}
+\begin{enumerate}
+	\item inizializzazione: imposto le variabili $x_0, \dots, x_{20}$ come $0,n,0,\dots, 0$;
+	\item esecuzione: eseguo le istruzione del programma $w$ (non ho bisogno del program counter);
+	\item terminazione: quando le isctruzioni di $w$ terminano oppure ho un loop;
+	\item output: contenuto di $x_0$, quindi $\Psi(n)=\textit{cont}(x_0)/\perp$.
+\end{enumerate}
+\paragraph{Semantica del programma $w$}
+$\Psi_w: \mathbb{N} \rightarrow \mathbb{R}_{\perp}$.
+
+\subsection{Definizione formale di semantica di un programma WHILE}
+\begin{itemize}
+
+\item Stato: foto della macchina in un tempo $t$ ovvero una tupla/vettore di 21 componenti: $(c_0, \dots, c_{20})$ con $c_i$ contenuto della cella $x_i$.
+\begin{displaymath}
+	W-\textit{Stati}=\mathbb{N}^{21}, \textit{ stato } \underline{x} \in \mathbb{N}^{21} \textit{ (vettore \underline{$x$})}
+\end{displaymath}
+\item Dati: $\mathbb{N}$
+\item Inizializzazione: $w\textit{-in}: \mathbb{N} \rightarrow \mathbb{N}^{21}$ con $w\textit{-in}(n)=(0,n,0,\dots,0)$
+\item Semantica operazione: \begin{displaymath}
+		[](): w\textit{-comandi} \times w\textit{-stati} \rightarrow w\textit{-stati}_{\perp} 
+		; [C](\underline{x})=\underline{y}
+\end{displaymath} 
+con $C$ comdando, $\underline{y}$ è lo stato prossimo partendo da $\underline{x}$ eseguendo $C$
+\end{itemize}
+Posso definire intuitivamente $[C](\underline{x}$ sulla struttura induttiva del comando $C$:
+\begin{itemize}
+\item $[BASE]$ Assegnamenti:
+\begin{displaymath}
+	\begin{split}
+		&[x_k=0](\underline{x}) = \underline{y} \textbf{ con } y_i=\begin{cases}
+				x_i &\textbf{ se } i \neq k \\
+				0 &\textbf{ se } i = k
+			\end{cases} \\		
+		&[x_k=x_j +/\dot{-}1](\underline{x}) = \underline{y} \textbf{ con } y_i=\begin{cases}
+				x_i &\textbf{ se } i \neq k \\
+				x_j +/\dot{-}1 &\textbf{ se } i = k
+			\end{cases} 
+	\end{split}
+\end{displaymath}
+\item $[PASSO]$ Comando composto: $[\underline{\textit{BEGIN}}\textit{ }C_1, \dots, C_m \textit{ } \underline{\textit{END}}]$, conosco $[C_i]$ per ipotesi induttiva, ovvero conosco cosa fa ogni singolo comando.
+\begin{displaymath}
+	[C_m](\dots(([C_2]([C_1](\underline{x})))\dots) = \underline{y} = [C_1] \cdot \dots \cdot [C_m](\underline{x})
+\end{displaymath}
+\item $[PASSO]$: Comando while: $[\underline{\textit{WHILE}}\textit{ }x_k \neq 0 \underline{\textit{DO}}\textit{ } C]$, conosco $[C_i]$ come sopra.
+\begin{displaymath}
+	[C](\dots(([C]([C](\underline{x})))\dots) = \underline{y}
+\end{displaymath}
+Quante volte applico $C$? Tante volte quanto serve per azzerare $x_k$ dello stato risultante durante l'iterazione del comando $C$ ovvero
+\begin{displaymath}
+	\begin{cases}
+		&[C]^e(\underline{x}) \textbf{ con } e=\mu t(\textit{$k$-esima componente di }[C]^{(t)}(\underline{x})=0 )\\
+		&\perp \textit{ altrimenti}
+	\end{cases}
+\end{displaymath}
+dove $\mu t$ è il minor numero di volte.
+\end{itemize}
+
+\paragraph{Semantica di $w$ e $w\textit{-prog}$}
+$\Psi_w(n)=\textbf{Pr}(0, [w](w\textit{-in}(n))$; proiezione 0-esima ci restituisce l'output applicando $[w]$ allo stato prodotto dall'inizializzazione con $x_1=n$.
+
+\subsection{Potenza computazionale sistema WHILE}
+\begin{displaymath}
+	F(WHILE)=\{ f \in \mathbb{N}_{\perp}^{\mathbb{N}}: \exists w \in w\textit{-PROG}, f= \Psi_w \} = \{ \Psi_w: w \in w\textit{-PROG} \}
+\end{displaymath}
+\subsubsection{Relazione tra $F(RAM)$ e $F(WHILE)$?}
+Che relazione esiste tra $F(WHILE$ e $F(RAM)=\{ \phi_P:P \in \textit{PROG} \} $?
+\begin{itemize}
+	\item $F(RAM) \subsetneq F(WHILE)$, sarebbe anche comprensibile vista la semplicità della macchina $RAM$;
+	\item Insiemi con intersezioni o disgiunti, sarebbe preoccupante perchè il concetto di calcolabile dipenderebbe dalla macchina;
+	\item $F(WHILE) \subsetneq F(RAM)$, sarebbe sorprendente poichè $WHILE$ sembra più soffisticata di $RAM$;
+	\item $F(RAM) = F(WHILE) \Rightarrow$ calcolabile non dipende dalla tecnologia
+\end{itemize}
+\subsubsection{Confronto tra due sistemi di calcolo}
+Poniamo di avere due sistemi di calcolo $C_1$ e $C_2$ con i relativi programmi $C_1\textit{-PROG}$ e $C_2\textit{-PROG}$. 
+\begin{displaymath}
+	\begin{split}
+		& F(C_1) = \{ f \in \mathbb{N}_{\perp}^{\mathbb{N}}: f= \Psi_{P_1} \textit{ per qualche $P_1$ e $C_1$}-PROG \} = \{ \Psi_{P_1} : P_1 \in C_1\textit{-PROG} \} \\
+		& F(C_2) = \{ f \in \mathbb{N}_{\perp}^{\mathbb{N}}: f= \phi_{P_2} \textit{ per qualche $P_2$ e $C_2$}-PROG \} = \{ \phi_{P_2} : P_2 \in C_2\textit{-PROG} \} \\
+	\end{split}
+\end{displaymath}
+Come mostriamo che $F(C_1) \subseteq F(C_2)$ ovvero che il primo non supera il secondo? Dimostro che 
+\begin{displaymath}
+	\forall f \in F(C_1) \Rightarrow f \in F(C_2)
+\end{displaymath}
+ovvero che per ogni elemento del primo insieme allora è anche nel secondo insieme (dimostrazione di inclusione).
+
+
+
+Risolviamo questo problema con un traduttore, prende un programma in un linguaggio e lo traduce in un altro linguaggio; per esempio quando compilo un programma in $C++$ creo un assembly, questo implica che $C++$ è al più potente come assembly. Matematicamente possiamo descrivere un traduttore come 
+\begin{displaymath}
+	\exists P_1 \in C_1 \textit{-PROG}: f=\Psi_{P_1} \Rightarrow \exists P_2 \in C_2\textit{-PROG}: f=\Phi_{P_2},
+\end{displaymath}
+per ogni programma nel primo sistema ne esiste uno equivalente a un programma del secondo sistema.
+
+
+\subsection{Concetto di traduttore}
+Dati i sistemi $C_1$ e $C_2$, una traduzione da $C_1$ a $C_2$ è una funzione $T: C_1\textit{-PROG} \rightarrow C_2\textit{-PROG}$ con le seguenti proprietà:
+\begin{itemize}
+	\item $[\underline{Programmabile}]$: è programabbile;
+	\item $[\underline{Completa}]$: traduce ogni $C_1\textit{-PROG}$ in $C_2\textit{-PROG}$;
+	\item $[\underline{Corretta}]$: mantiene la semantica $\forall P \in C_1\textit{-PROG}: \phi_{T(P)}=\Psi_P$, è la formalizzazione del concetto di compilatore (nota che $\phi_{T(P)}$ è l'oggetto e $Psi_P$ il sorgente).
+\end{itemize}
+Se esiste $T: C_1\textit{-PROG} \rightarrow C_2\textit{-PROG}$ allora $F(C_1) \subseteq F(C_2)$. Dimostrazione:
+\begin{displaymath}
+	\begin{split}
+		&f \in F(C_1) \Rightarrow \exists P \in C_1\textit{-PROG}: f= \Psi_p \\
+		&\textit{a $P$ applico T, ottengo}\\
+		&T(P) \in C_2\textit{-PROG} \textit{ (completezza), con } \phi_{T(P)} = \Psi_P = f \textit{ (correttezza)} \\
+		&\textit{esiste dunque un PROG in $C_2\textit{-PROG}$ per $f$, per cui }f \in F(C_2).
+	\end{split}
+\end{displaymath}
+
+
+\section{Lezione 8}
+
+
+
+
+
+
+
+
+
+
 
 
 

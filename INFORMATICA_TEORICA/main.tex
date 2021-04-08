@@ -6,6 +6,8 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{forest}
+\usepackage{algorithm2e}
+ \usepackage{algpseudocode}
 
 
 \title{INFORMATICA TEORICA}
@@ -829,16 +831,75 @@ Se esiste $T: C_1\textit{-PROG} \rightarrow C_2\textit{-PROG}$ allora $F(C_1) \s
 
 
 \section{Lezione 8}
+Mostreremo $F(WHILE) \subseteq F(RAM)$, mostreremo una traduzione $comp:W-PROG \rightarrow PROG$. Per comodità utilizzeremo il linguaggio RAM etichettato: etichetto una riga (istruzione) per fare un salto, ovviamente ho la stessa potenza computazionale di RAM.
 
 
 
+In quanto $W-PROG$ è definito induttivamente $comp$ può essere definito induttivamente:
+\begin{enumerate}
+	\item $[BASE]$ mostro come compilare gli assegnamenti;
+	\item $[PASSO]$ per ipotesi induttiva assumo dato $comp(C_1), \dots, comp(C_m)$ e mostro come compilare il comando composto $\underline{BEGIN} \textit{ } C_1, \dots, C_m \textit{ } \underline{END}$;
+	\item $[PASSO]$ per ipotesi induttiva assumo dato $comp(C)$ e mostro come compilare il comando while $\underline{WHILE}\textit{ } X_k \neq 0\textit{ } \underline{DO}\textit{ } C$.
+\end{enumerate}
 
+\subsection{Costruzione induttiva di $comp$}
+In generale tradurremo $X_k$ con $R_k$ ovvero variabili di WHILE in registri RAM ($21 \Rightarrow \infty$).
+\paragraph{$[BASE]$ assegnamenti}
+\begin{itemize}
+	\item $comp(X_k := 0)$
+	\begin{displaymath}
+		\begin{split}
+			 \underline{loop}: &\text{ } if \text{ } R_k == 0 \textit{ then goto \underline{exit}} \\
+			 & R_k \leftarrow R_k \dot{-} 1 \\
+			 & if \text{ } R_{21} == 0 \textit{ then goto \underline{loop}} \\
+			 \underline{exit}: & R_k \leftarrow R_k \dot{-} 1 
+		\end{split}
+	\end{displaymath}
+	Uso $R_{21}$ perchè sarà sempre uguale a 0, WHILE ha 21 variabili (da 0 a 20).
+	\item $comp(X_k := X_j +/\dot{-} 1)$
+	\begin{itemize}
+		\item se $k==j$: $R_k \leftarrow R_k +/\dot{-} 1$
+		\item altrimenti: \begin{enumerate}
+			\item salvo $X_j$ in $R_{22}$;
+			\item azzero $R_k$;
+			\item metto in $R_j$ e $R_k$ il contenuto di $R_22$ (un ciclo che fa + 1 al $R_{22}$ e somma 1 a a $R_k$ e $R_k$;
+			\item sommo/sottraggo 1 a $R_k$.
+		\end{enumerate}
+	\end{itemize}
+\end{itemize}
+\paragraph{$[PASSO]$}
+\begin{itemize}
+	\item comando composto: basta prendere la sequenza di comando e creare la sequenza di compilazione dei comandi
+	\item comando while: $comp(\underline{while}\text{ } x_k \neq 0 \textit{ \underline{do} } C)$:
+	\begin{displaymath}
+		\begin{split}
+			\underline{loop}: &\text{ } if \text{ } R_k == 0 \textit{ then goto \underline{exit}} \\
+			 & comp(C) \\
+			 & if \text{ } R_{21} == 0 \textit{ then goto \underline{loop}} \\
+			 \underline{exit}: & R_k \leftarrow R_k \dot{-} 1
+		\end{split}
+	\end{displaymath}
+\end{itemize}
 
+\paragraph{Considerazioni}
+\begin{enumerate}
+	\item il compilatore è facilmente programmabile;
+	\item compila ogni sorgente while $\Rightarrow$ completo;
+	\item mantiene la semantica: $\Psi_w = \Phi_{comp(w)}  \Rightarrow$ corretto;
+\end{enumerate}
+quindi $F(WHILE) \subseteq F(RAM)$.
 
-
-
-
-
+\subsection{$F(RAM) \subseteq F(WHILE)$}
+Faremo un interprete (compila riga per riga e ha come output l'output del programma), $I_w$: interprete scritto in WHILE di programmi scritti in RAM.
+\begin{itemize}
+	\item input di $I_w$: $P \in PROG$ e $x \in \mathbb{N}$, output: $\Phi_P(x)$
+	\item input di $I_w$: $codifica(P) = n$ e $x \in \mathbb{N}$, output: $\Phi_n(x) = \Phi_P(x)$
+	\item input di $I_w$: $ <x,n>$ con $x$ il dato di input e $n$ la codifica del programma, output: $\Phi_n(x) =\Phi_P(x)$
+\end{itemize}
+La semantica di $I_w$: $\forall x,n \in \mathbb{N}: \Psi_{I_w}(<x,n>)=\Phi_n(x)=\Phi_P(x)$.
+\paragraph{Macro while}
+Per comodità, nella scrittura di $I_w$ utilizzeremo un WHILE che ingloba alcune macro che possono essere tradotte in WHILE puro.
+\section{Lezione 9}
 
 
 

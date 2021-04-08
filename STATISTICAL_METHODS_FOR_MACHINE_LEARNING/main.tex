@@ -146,10 +146,75 @@ Possiamo estrapolare la seguente regola da questo esempio (quando $F$ è finito)
 \end{displaymath}
 
 \section{Lezione 3}
+\subsection{Overfitting e Underfitting}
+Overfitting: Training error basso ma test error alto (nel caso di ERM $|F|$ grande).
 
 
 
+Underfitting: Training error alto e test error vicino al training error.
+\subsection{Noisy label}
+In pratica non c'è $f^*:X \rightarrow Y$ tale che $f^*(x)=y$ per tutti gli esempi $(x,y)$. $y$ ha un disturbo dato $x$: stessi datapoint possono avere diverse label.
+\begin{itemize}
+	\item Human in the loop: persone categorizzano diversamente i dati;
+	\item Lack of information: le informazioni contenute nei datapoint $X$ non sono sufficienti per determinare un'unica label
+\end{itemize}
+Noisy label provoca overfitting.
+\subsection{Nearest Neighbor}
+Classifica i punti usando la label del training point più vicino.
+Averno $x=(x_1, \dots, x_d)$ con $d$ coordinate per punto calcoliamo la distanza euclidea per ogni dimensione: $||x-x'||=\sqrt{\sum\limits_i^d (x_i-x_i'}$. NN genera un predittore con training error sempre a 0, devo salvare tutto il training set per fare la predizione. 
 
+
+
+$k$-NN: come NN ma usa la maggioranza delle label dei $k$ vicini data points. $k$ viene scelta dispari per non avere un numero pari di vicini nel punto del test che voglio classificare. Quindi guardo i $k$ più vicini al punto che sto valutando e vince la maggioranza. Per classificazione uso più label (il caso generico è spiegato su classificazione binaria), per regressione faccio la media dei $k$ più vicini.
+
+\section{Lezione 4}
+\subsection{Tree Predictor}
+NN funziona solo per attributi numerici. Abbiamo un albero in cui i nodi interni sono taggati come test e i nodi foglia solo label. Per esempio abbiamo
+\begin{displaymath}
+	\begin{split}
+		&X_i=\{a,b,c,d \} \\
+		&f(X_i)=
+			\begin{cases}
+				&1 \textit{ se } x_1=a \\
+				&2 \textit{ se } x_2=b \\
+				&3 \textit{ altrimenti}
+			\end{cases}
+	\end{split}
+\end{displaymath}
+I valori del sistema indicano a quale nodo devo andare. Posso avere confronti su attributi categorici o soglie suattributi $\in \mathbb{R}$.
+
+
+
+Dato un training set $S$, come costruisco un tree classificator?
+\begin{itemize}
+	\item $Y={-1,1}$;
+	\item albero binario compreto (0 o 2 figli);
+	\item $0-1$ loss;
+	\item $S=(x_1,y_1), \dots, (x_m,y_m)$.
+\end{itemize}
+Partiamo da un classificatore binario costante che classifica tutti allo stesso modo, ovvero uso la maggioranza per assegnare la label alla foglia. Splitto ora questa foglia in due foglie e pongo un test nel classificatore costante iniziale. Ricordiamo che un test è fatto su una sola dimensione dell'input. Partiziono il training set $S$ in due: $S_l$ e $S_l'$ a cui corrispondono rispettivamente le labl $y_l$ e $y_l'$. Defininiamo $N_l=|S_l|$ dove $y_l$ è in maggioranza in $S_l$.
+
+
+
+Definiamo ora $S_l^+=\{ (x_t,y_t) \in S_l: y_t=+1 \}$ e $S_l^-=\{ (x_t,y_t) \in S_l: y_t=-1 \}$.
+\begin{displaymath}
+	\begin{split}
+		& y_l=\begin{cases}
+			+1 &\textit{ se } N_l^+ \geq N_l^- \\
+			-1 &\textit{ altrimenti}		
+		\end{cases}	\\	
+		& \mathbb{I}=\begin{cases}
+			1 &\textit{ se vero} \\
+			0 &\textit{ altrimenti}
+		\end{cases} \\
+		&\hat{l}_s(h_T) = \frac{1}{m}	\sum\limits^m_{t=1} \mathbb{I} \{ h_T(x_t) \neq y_t \} =\\
+		&= \frac{1}{m}\sum\limits_l \min \{ N_l^+, N_l^- \} =
+	\end{split}
+\end{displaymath}
+(l'ultimo passaggio è perchè alla label associo la maggioranza, con $l$ nella sommatoria ciclo sui nodi foglia. Considerando che $\frac{N_l^+}{N_l}+\frac{N_l^-}{N_l}=1$ e che $\sum\limits_l (N_l^++N_l^-)=m=|S|$)
+\begin{displaymath}
+	= \frac{1}{m} \sum\limits_l \min
+\end{displaymath}
 
 
 

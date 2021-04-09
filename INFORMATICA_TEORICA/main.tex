@@ -6,8 +6,8 @@
 \usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{forest}
-\usepackage{algorithm2e}
- \usepackage{algpseudocode}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 
 
 \title{INFORMATICA TEORICA}
@@ -900,6 +900,109 @@ La semantica di $I_w$: $\forall x,n \in \mathbb{N}: \Psi_{I_w}(<x,n>)=\Phi_n(x)=
 \paragraph{Macro while}
 Per comodità, nella scrittura di $I_w$ utilizzeremo un WHILE che ingloba alcune macro che possono essere tradotte in WHILE puro.
 \section{Lezione 9}
+\subsection{Interprete WHILE di programmi RAM}
+\subsubsection{Variabili}
+$I_w$ ricrea nelle sue variabili l'ambiente (macchina RAM) in cui esegue $P$.
+Se $cod(P)=n$ allora $P$ non userà mai $R_j$ con $j>n$. Posso quindi restringermi a modellare la sequenza $R_0,\dots,R_{n+2}$. Il contenuto della memoria in cui si esegue $P$ può essere considerato in una sola variabile contenente $<a_0,a_1, \dots, a_{n+2}>$.
+
+
+
+\noindent
+Avremo quindi la seguente configurazione:
+\begin{itemize}
+	\item $X_0 \Leftarrow <R_0,\dots,R_{n+2}>$;
+	\item $X_1 \Leftarrow L$ con $L$ program counter;
+	\item $X_2 \Leftarrow x$ ovvero il dato di input;
+	\item $X_3 \Leftarrow n$ ovvero il "listato" del programma $P$; 
+	\item $X_4 \Leftarrow$  codice dell'istruzione da eseguire prelevata da $X_3$ nella posizione $X_1$. 
+\end{itemize}
+
+\paragraph{Inizializzazione}
+\begin{enumerate}
+	\item $X_1 \Leftarrow input(<x,n>)$
+	\item $X_2:= sin(X_1)$ ovvero il dato di input;
+	\item $X_3:= sin(X_1)$ ovvero il "listato" del programma $P$; 
+	\item $X_1 :=1$. 
+\end{enumerate}
+\subsubsection{Codice interprete in macrowhile}
+\begin{algorithm}
+        \begin{algorithmic}[1]
+        		\While{$(X_1 \neq 0)$}\Comment{HALT con $L=0$}
+        		\If{$(X_1 > length(X_2))$} $X_1:=0$ \Comment{Ho finito le istrizioni}
+        		\Else
+        			\State $X_4 := Pro(X_1,X_3)$ \Comment{Prendo elemento in pos $X_1$ di $X_3$ (fetch)}
+				\If{$(X_4 mod 3 == 0)$} \Comment{$R_k \leftarrow R_k+1$}
+					\State $X_5 := X_4/3$
+					\State $X_0:= incr(X_5,X_0)$ \Comment{Increm di 1 elem in pos $X_5$ di $X_0$}
+					\State $X_1:=X_1+1$ \Comment{Incremento program counter}
+            		\EndIf
+            		
+            		\If{$(X_4 mod 3 == 1)$} \Comment{$R_k \leftarrow R_k\dot{-}1$}
+					\State $X_5 := (X_4-1)/3$
+					\State $X_0:= decr(X_5,X_0)$ 
+					\State $X_1:=X_1+1$ 
+            		\EndIf
+            		
+            		\If{$(X_4 mod 3 == 2)$} \Comment{$\textit{if }R_k==0\textit{ then goto }m$}
+					\State $X_5 := sin((X_4+1)/3)$\Comment{$k$}
+					\State $X_6 := des((X_4+1)/3)$\Comment{$m$}
+					\If{$(Pro(X_5,X_0)==0)$}
+						\State $X_1=X_6$
+					\Else 
+						\State $X_1:=X_1+1$ 
+					\EndIf
+            		\EndIf
+            \EndIf
+            \EndWhile
+            \State $X_0:=sin(X_0)$
+        \end{algorithmic}
+    \end{algorithm}
+
+\subsubsection{Conseguenze}
+Posso costruire $Comp:PROG\rightarrow W-PROG$:
+\begin{itemize}
+	\item $n=cod(P)$
+	\item $X_1 := <x,n>$
+	\item $I_w$
+\end{itemize}
+Programmabile, completo e corretto.
+
+
+
+
+$\Psi_{comp(P)}(x)=\Psi_{I_w}(<x,n>)=\Phi_n(x)=\Phi_P(x)$ OK!
+\paragraph{Teorema di Bohm-Jacopini} Per ogni programma con goto (RAM) ne esiste uno equivalente in linguaggio strutturato (WHILE).
+
+\paragraph{Finalmente..}
+$\mathbb{N}_{\perp}^{\mathbb{N}} \bar{\sim} \mathbb{N} \sim PROG \sim F(RAM) = F(WHILE)$
+\begin{itemize}
+	\item nei sistemi di programmazione RAM e WHILE esistono funzioni non computabili, dimostrato formalmente;
+	\item i sistemi RAM e WHILE, pur profondamente diversi, calcolano le stesse cose.
+\end{itemize}
+
+
+
+
+Usiamo $comp:W-PROG \rightarrow PROG$ sse $I_w(\Psi_{I_w}(<x,n>)=\Phi_n(x))$.
+
+\begin{displaymath}
+	\begin{split}
+		&U=comp(I_w) \in PROG \\
+		\Phi_U(<x,n>)=\Psi_{I_w}(<x,n>)=\Phi_n(x)
+	\end{split}
+\end{displaymath}
+Nel sistema di programmazione RAM esiste un programma RAM capace di simulare qualunque altro programma RAM! $U$ è detto interprete universale (RAM).
+
+\subsubsection{Riflessioni concetto di calcolabilità}
+Due sistemi profondamente diversi che determinano la stessa idea di calcolabilità. Possiamo sublimare il concetto di calcolabile?
+
+
+
+Possiamo pensare di definire ciò che è calcolabile a prescindere dalle macchine che usiamo per calcolare?
+
+
+
+Possiamo pensare di definire ciò che è calcolabile in termini più astratti, matematici, "lontani dall'informatica"?
 
 
 

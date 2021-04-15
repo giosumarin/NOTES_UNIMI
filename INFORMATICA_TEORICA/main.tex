@@ -153,7 +153,7 @@ Abbiamo $P \in \text{PROG}$ che è una sequenza di regole che trasforma un dato 
 
 \begin{displaymath}
 \begin{split}
-    &C:\textit{DATI}_{\perp}^{\textit{DATI}} \rightarrow \textit{DATI}_{\perp} \\
+    &C:\textit{DATI}_{\perp}^{\textit{DATI}} \times \textit{DATI} \rightarrow \textit{DATI}_{\perp} \\
     &\textbf{dove } C(P,x) \textbf{ è la funzione calcolata da $P$}
 \end{split}
 \end{displaymath}
@@ -161,9 +161,9 @@ $P$ è un oggetto semantico/rappresentazione, se faccio girare ho una funzione.
 \paragraph{Potenza computazionale di $C$}
 \begin{displaymath}
 \begin{split}
-    &F(C)= \{ C(P,_): P \in \textit{PROG}\} \subseteq \textit{DATI}_{\perp}^{\textit{DATI}}\\
-    &F(C) = \textit{DATI}_{\perp}^{\textit{DATI}} \Rightarrow \textbf{ informatica può tutto}\\
-    &F(C) \subsetneq \textit{DATI}_{\perp}^{\textit{DATI}} \Rightarrow \textbf{ esistono compiti non automatizzabili}
+    &F(C)= \{ C(P,\_): P \in \textit{PROG}\} \subseteq \textit{DATI}_{\perp}^{\textit{DATI}}  \\
+    &F(C) = \textit{DATI}_{\perp}^{\textit{DATI}} \Rightarrow \textbf{ informatica può tutto} \\
+    &F(C) \subsetneq \textit{DATI}_{\perp}^{\textit{DATI}} \Rightarrow \textbf{ esistono compiti non automatizzabili} 
 \end{split}
 \end{displaymath}
 \paragraph{Cardinalità}
@@ -1004,6 +1004,35 @@ Possiamo pensare di definire ciò che è calcolabile a prescindere dalle macchin
 
 Possiamo pensare di definire ciò che è calcolabile in termini più astratti, matematici, "lontani dall'informatica"?
 
+
+\section{Lezione 10}
+\subsection{Chiusura di insiemi rispetto ad operazioni}
+Dato un insieme $U$, si definisce un'operazione su $U$ una qualunque funzione $op:U\times \dots \times U \rightarrow U$ con $U$ ripetuta $k$ volte in input: $k$=arietà dell'operazione.
+\paragraph{Esempi} $U=\mathbb{N}$
+\begin{itemize}
+	\item $+:\mathbb{N} \times \mathbb{N} \rightarrow \mathbb{N}$, somma: $+(5,3)=8$, operazione binaria;
+	\item $\lfloor \sqrt{} : \mathbb{N} \rightarrow \mathbb{N}$, radice troncata, operazione unaria;
+	\item $Pro_t^n: \mathbb{N} \times \dots \times \mathbb{N} \rightarrow \mathbb{N}$ con $n$ volte in input, proiezione $t$-esima, operazione $n$-aria.
+\end{itemize}
+\subsubsection{Chiusura}
+L'insieme $a \subseteq U$ è \underline{chiuso} risetto all'operazione $op:U^k \rightarrow U$ sse $\forall a_1, \dots, a_k \in A: op(a_1, \dots, a_k) \in A$, ovvero l'operazione non mi "amplia" $A$.
+\paragraph{Esempi}
+\begin{itemize}
+	\item $+: \mathbb{N}^2 \rightarrow \mathbb{N}, PARI \subseteq \mathbb{N}$. $PARI$ è chiuso per $+$? si, $2k + 2j =2(k+j)$
+	\item $+: \mathbb{N}^2 \rightarrow \mathbb{N}, DISPARI \subseteq \mathbb{N}$. $DISPARI$ è chiuso per $+$? no, $23+3=6$
+	\item $/: \mathbb{Q}^2 \rightarrow \mathbb{Q}, \mathbb{N} \subseteq \mathbb{Q}$. $\mathbb{N}$ è chiuso per $/$? no, $5/2 \bar(\in) \mathbb{N}$
+\end{itemize}
+Per rispondere si dobbiamo dimostrare che vale, nel nostro caso, per ogni coppia; per rispondere no basta un controesempio.
+
+
+
+
+In generale: se $\Omega$ è un'insieme di operazioni su $U$, allora $A \subseteq U$ è chiuso rispetto a $\Omega$ se è chiuso per ogni operazione in $\Omega$.
+\paragraph{Esempi}
+\begin{itemize}
+	\item $\Omega = \{ +, - \}, PARI \subseteq \mathbb{N} \rightarrow$ somma si, prodotto si ($2k \cdot 2j = 4kj$);
+	\item $\Omega = \{ +, - \}, DISPARI \subseteq \mathbb{N} \rightarrow$ somma no, prodotto si ( $(2k+1)  (2j+1) = 4kj+2k+2j+1$ è dispari).
+\end{itemize}
 
 
 \end{document}

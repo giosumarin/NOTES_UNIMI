@@ -1095,18 +1095,102 @@ $A^\Omega$ si ottiene generalizzando il processo per un'operazione induttivament
 	
 \section{Lezione 11}
 
+\subsection{$ELEM$: nucleo delle funzioni calcolabili}
+$ELEM=$
+\begin{displaymath}
+\begin{split}
+	\{ successore:&S(x)=x+1, x \in \mathbb{N} \\
+	zero:&O^n(x_1,\dots, x_n)=0, x \in \mathbb{N}, \textit{ //prende $n$ input e restituisce 0} \\
+	proiettori:&Pro^n_k(x_1,\dots, x_n)=x_k, x \in \mathbb{N} \}\end{split}
+\end{displaymath}
+Queste funzioni sono facilmente implementabili e sicuramente calcolabili.
 
 
 
+Ovviamente $ELEM$ non può essere considerato come l'idea teorica di tutto ciò che è calcolabile, per esempio $f(x)=x+2 \cancel{\in} ELEM$ ma $f$ deve essere considerata calcolabile!
 
 
 
+$\Rightarrow$ $ELEM$ deve essere ampliata mantenendo l'idea di induttivamente calcolabile.
 
+\subsection{Operatore di composizione di funzioni}
+Sia $h:\mathbb{N}^k \rightarrow \mathbb{N}$ e $g_1, \dots, g_k: \mathbb{N}^k \rightarrow \mathbb{N}$, denoteremo $\underline{x} \in \mathbb{N}^k$.
+\begin{displaymath}
+	\begin{split}
+		&COMP(h, g_1, \dots, g_k): \mathbb{N}^k \rightarrow \mathbb{N} \textit{ definito come } \\
+		& COMP(h, g_1, \dots, g_k)(\underline{x})=h(g_1(\underline{x}), \dots, g_k(\underline{x})
+	\end{split}
+\end{displaymath}
+Intuitivamente $COMP$ è implementabile, per cui la composizione di "cose" programmabili rimane programmabile.
 
+\subsubsection{Ampliamo $ELEM$ chiudendo rispetto a $COMP$}
+$ELEM^{COMP}$ effettivamente amplia $ELEM$ infatti
+\begin{displaymath}
+	\begin{split}
+		&f(x)=x+2 \cancel{\in} ELEM \textit{ ma } f(x) \in ELEM^{COMP} \\
+		& \textit{infatti } f(x)=COMP(SUCC,SUCC)(x)=SUCC(SUCC(x)) = f(x)
+	\end{split}
+\end{displaymath}
 
+$ELEM^{COMP}$ può incarnare teoricamente l'idea di classe delle funzioni calcolabili? \underline{\textbf{NO!}}
 
+\subsection{Operatore di ricorsione primitiva}
+\paragraph{Esempio} Fattoriale:
+\begin{displaymath}
+	FATT(n)=	
+	\begin{cases}
+		1 &\textit{ se } n = 0 \\
+		n(FATT(n-1)) &\textit{ se } n > 0
+	\end{cases}
+\end{displaymath}
 
+Siano $g:\mathbb{N}^n \rightarrow \mathbb{N}$ e $ h:\mathbb{N}^{n+2} \rightarrow \mathbb{N} $; $g(\underline{x})$ e $h(z,y,\underline{x})$ con $x \in \mathbb{N}^n$
+\begin{displaymath}
+	RP(h,y)=	f(\underline{x},y)=
+	\begin{cases}
+		y(\underline{x}) & \textit{ se } y=0 \\
+		h(f(\underline{x}, y-1)) & \textit{ se } y>0 
+	\end{cases}
+\end{displaymath}
 
+\subsubsection{Ampliamo $ELEM^{COMP}$ chiudendo rispetto a $RP$}
+$ELEM^{COMP,RP}=\underline{RICPRIM}=$ {funzioni ricorsive privitive}
+\begin{displaymath}
+	SOMMA(x,y)=
+	\begin{cases}
+		x=Pro_1^2 &\textit{ se } y=0  \textit{ //non ho costante $x$ in $ELEM$} \\
+		SUCC(SOMMA(x,y-1)) &\textit{ se } y>0
+	\end{cases}
+\end{displaymath}
+
+\begin{displaymath}
+	PROD(x,y)=
+	\begin{cases}
+		0=O^2(x,y) &\textit{ se } y=0  \\
+		SOMMA(x,PROD(x,y-1)) \textit{ se } y>0
+	\end{cases}
+\end{displaymath}
+
+\begin{displaymath}
+	PRED(x)=
+	\begin{cases}
+		0 &\textit{ se } x=0  \\
+		x \dot{-} 1 \textit{ se } y>0
+	\end{cases}
+\end{displaymath}
+con il predecessore posso definire la differenza come
+\begin{displaymath}
+	DIFF(x,y)=
+	\begin{cases}
+		x &\textit{ se } y=0  \\
+		DIFF(PRED(x),y-1) &\textit{ se } y>0
+	\end{cases}
+\end{displaymath}
+
+\subsection{$RICPRIM$ vs $WHILE$}
+$RICPRIM$ contiene già molte funzioni e potrei già chiedermi se ho raggiunto $F(WHILE)$. Mostreremo $RICPRIM \subseteq f(WHILE)$ per induzione strutturare. ($F(WHILE)$ ha possibilità di indefinito mentre $RICPRIM$ no).
+
+\subsubsection{Road map}
 
 
 

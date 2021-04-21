@@ -1191,9 +1191,95 @@ con il predecessore posso definire la differenza come
 $RICPRIM$ contiene già molte funzioni e potrei già chiedermi se ho raggiunto $F(WHILE)$. Mostreremo $RICPRIM \subseteq f(WHILE)$ per induzione strutturare. ($F(WHILE)$ ha possibilità di indefinito mentre $RICPRIM$ no).
 
 \subsubsection{Road map}
+\begin{enumerate}
+	\item $[BASE]$ le funzioni in $ELEM$ sono in $RICPRIM$;
+	\item $[PASSO$ $INDUTTIVO]$ se $h,g_1,\dots,f_k \in RICPRIM \Rightarrow COMP(h,g_1,\dots,g_k \in RICPRIM$;
+	\item $[PASSO$ $INDUTTIVO]$ se $g,k \in RICPRIM \Rightarrow RP(g,h) \in RICPRIM$;
+	\item null'altro è in $RICPRIM$;
+\end{enumerate}
+quindi:
+\begin{enumerate}
+	\item dimostro che $ELEM \subseteq F(WHILE)$;
+	\item assumo per ipotesi induttiva che $h,g_1,\dots, g_k \in RICPRIM$ siano in $F(WHILE)$ e dimostro che $COMP(h,g_1,\dots,g_k \in F(WHILE)$;
+	\item assumo per ipotesi induttiva che $g,h \in RICPRIM$ siano in $F(WHILE)$ e dimostro che $RP(g,h) \in F(WHILE)$
+	
+\end{enumerate}
+$\Rightarrow RICPRIM \subseteq F(WHILE)$.
+\subsubsection{Dimostrazione induttiva}
+\begin{itemize}
+	\item $[BASE]$: $ELEM \subseteq F(WHILE)$, ovvio (le 3 funzioni iniziali;
+	\item $[PASSI$ $INDUTTIVI]$:
+		\begin{itemize}
+			\item $COMP$: assumiamo per ipotesi induttiva $h,g_1,\dots,g_k \in RICPRIM$ siano in $F(WHILE) \Rightarrow$ esistono $H,G_1,\dots,G_k \in W-PROG$ t.c. $\Psi_H=h,\Psi_{G_1}=g_1,\dots$. Mostro quindi un programma $WHILE$ che calcola $COMP(h,g_1,\dots,g_k)=h(g_1(\underline{x}),\dots,g_k(\underline{x}))$.
+			\begin{algorithm}
+			\caption{$w \equiv$}
+        \begin{algorithmic}[1]
+        		 \State $\underline{BEGIN}$ \Comment{$x_1 \leftarrow \underline{x}$ come $<a_1,\dots, a_n>$}
+        		 \State $x_0 := G_1(x_1)$
+        		 \State $x_0 := [x_0, G_2(x_1)$] \Comment{calcolo i vari $G$ e poi metto insieme in $H$}
+        		 \State $\dots$
+        		 \State $x_0 := [x_0,G_k(x_1)]$ \Comment{$x_0 := [G_1(\underline{x}),\dots, G_k(\underline{x})]$}
+        		 \State $x_0 := H(x_0)$ \Comment{$x_0:=H(G_1(\underline{x}),\dots,G_k(\underline{x}))$}
+        		 \State $\underline{END}$
+        		 
+        \end{algorithmic}
+    \end{algorithm}
+    \\
+    		quindi $Psi_w(\underline{x})=COMP(h,g_1,\dots,g_k)(\underline{x})$
+    			
+    			\item $RP$: assumo per ipotesi induttiva $g(\underline{x}), h(z,y,\underline{x}) \in RICPRIM$ in $F(WHILE) \Rightarrow$ esistono $G,H \in W-PROG$ con $\Psi_G=g$ e $\Psi_H=h$.Mostro qundi un programma $WHILE$ che calcola
+    			\begin{displaymath}
+    				RP(g,h)=f(\underline{x},y)=
+    				\begin{cases}
+    					g(\underline{x}) &\textit{ se } y=0\\
+    					h(f(\underline{x},y-1),y-1,\underline{x}) &\textit{ se } y>0
+    				\end{cases}
+    			\end{displaymath}
+    			
+    			Notiamo che $f(\underline{x},2)=h(h(g(\underline{x}),0),1,\underline{x})$
+    			\begin{algorithm}
+			\caption{$w \equiv$}
+        \begin{algorithmic}[1]
+        		 \State $\underline{BEGIN}$ \Comment{$x_1 \leftarrow <\underline{x},y>$}
+        		 \State $t:=G(\underline{x})$
+        		 \State $k:=1$
+        		 \While{$k\leq y$}
+        		 	\State $t:=H(t,k-1,\underline{x})$
+        		 	\State $k:=k+1$
+        		 \EndWhile
+        		 \State $\underline{END}$
+        		 
+        \end{algorithmic}
+    \end{algorithm}
+    \\
+    			quindi $\Psi_w(<\underline{x},y>)=RP(g,h)(\underline{x},y)$
+    			
+		\end{itemize}
+	
+	
+\end{itemize}
+Quindi abbiamo dimostrato per induzione strutturale che $RICPRIM \subseteq F(WHILE)$.
+\subsubsection{Considerazioni su $RICPRIM$}
+\begin{itemize}
+	\item vorremo che la nostra "idea teorica" ($RICPRIM$) di calcolabilità raggiungesse almeno quella pratica ($F(WHILE)$), quindi la normale domanda è: l'inclusione è propria? (ovvero inclusione stretta);
+	\item è facile dimostrare per induzione strutturale che tutte le funzioni in $RICPRIM$ sono totali (ovvero che terminano sempre);
+	\item $F(WHILE)$ continene anche funzioni parziali (programmi infiniti) $\Rightarrow RICPRIM \subsetneq F(WHILE)$;
+	\item posso tradurre il $WHILE$ di prima in un $FOR$, $F(FOR)=RICPRIM$;
+	\item poniamo di usare $WHILE-LOOP$ che non vanno all'$\infty$, consideramo cioè l'insieme $\tilde{F}(WHILE)=\{ \Psi_w:w \in w-PROG$ e $\Psi_w$ è totale $ \}$;
+	\item l'inclusione $RICPRIM=F(FOR) \subseteq \tilde{F}(WHILE)$ è propria? Per diagonalizzazione $RICPRIM \subsetneq \tilde{F}(WHILE)$. In particolare per la funzione di Ackermann:
+	\begin{displaymath}
+	A(m,n)=
+		\begin{cases}
+			n+1 &\textit{ se } m=0 \\
+			A(m-1,1) &\textit{ se } m>0,n=0 \\
+			A(m-1,f(m,n-1)) &\textit{ se } m>0, n>0
+		\end{cases}
+\end{displaymath}		
+	
+	 cresce troppo in fretta per essere in $RICPRIM \Rightarrow$ Ackermann $\in \tilde{F}(WHILE)$ ma $\cancel{\in} RICPRIM$ perchè for non può cambiare il "TO $y$", ovvero non può prevedere le iterazioni.
+\end{itemize}
 
-
-
+\section{Lezione 12}
 
 
 \end{document}

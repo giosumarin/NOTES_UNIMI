@@ -1280,6 +1280,146 @@ Quindi abbiamo dimostrato per induzione strutturale che $RICPRIM \subseteq F(WHI
 \end{itemize}
 
 \section{Lezione 12}
+\subsection{Operatore di minimalizzazione di funzioni}
+Sia $f:\mathbb{N}^{n+1} \rightarrow \mathbb{N}; f(\underline{x},y)$ con $\underline{x} \in \mathbb{N}$. Definiamo 
+\begin{displaymath}
+	MIN(f(\underline{x},y))=g(\underline{x})=
+	\begin{cases}
+		y &\textit{ se } f(\underline{x},y)=0 \textit{ e } \forall t<y:f(\underline{x},t)\neq 0 \\
+		\perp &\textit{ altrimenti}
+	\end{cases}
+\end{displaymath}
+con $\forall t<y:f(\underline{x},t)\neq 0$ indichiamo che $y$ è il più piccolo valore t.c. $f(\underline{x},y)=0$. Possiamo scrivere l'operatore di minimalizzazione come
+\begin{displaymath}
+	\mu y (f(\underline{x},y)=0) \textit{ e } \perp \textit{ se } \nexists  \textit{ tale } y
+\end{displaymath}
+dove con $\mu y$ indichiamo il più piccolo valore di $y$ tale che $f(\underline{x},y)=0$.
+\paragraph{Esempi} ($f(x,y) \Rightarrow MIN(f(\underline{x},y))=g(\underline{x})$)
+\begin{itemize}
+	\item $x+y+1 \Rightarrow \perp$: sono in $\mathbb{N}$ e quindi non ho i numeri negativi, il più piccolo $y$ è 0 quindi non ho minimalizzazione;
+	\item $ x \dot{-} y \Rightarrow x $;
+	\item $ y \dot{-} x \Rightarrow 0 $;
+	\item $ x \dot{-} y^2 \Rightarrow \lceil \sqrt{x} \rceil $.
+\end{itemize}
+\subsection{La classe $P$ delle funzioni ricorsive parziali}
+Ampio $RICPRIM$ chiudendo rispetto all'operatore $MIN$, ovvero $RICPRIM^{MIN} = ELEM^{COMP,RP,MIN} = P =$ \{funzioni ricorsive parziali\}.
 
 
+
+Sicuramente $P$, che grazie a $MIN$ contiene anche funzioni parziali, amplia $RICPRIM$ fatto solo da funzioni totali. Ma come si pone rispetto a $F(WHILE)$?
+\subsubsection{Teorema $P \subseteq F(WHILE)$}
+Dimostrazione: $P \equiv RICPRIM^{MIN}$ può essere definito induttivamente come:
+\begin{enumerate}
+	\item le funzioni in $RICPRIM$ sono in $P$;
+	\item se $f$ appartiene a $P$ allora $MIN(f) \in P$
+	\item null'altro è in $P$.
+\end{enumerate} 
+
+Quindi, per induzione strutturale, dimostriamo il punto 2 con i seguenti passi:
+\begin{enumerate}
+	\item le funzioni $RICPRIM$ sono $WHILE$-programmabili (FATTO!);
+	\item sia $f \in P$ $WHILE$-programmabile per ipotesi induttiva, allora esibisci un programma $WHILE$ che calcoli $MIN(f)$.
+\end{enumerate}
+
+Sia $f(\underline{x},y \in P$; per ipotesi induttiva, sia $f$ calcolata dal programma $WHILE$ $F$. Scriviamo un programma $WHILE$ per
+\begin{displaymath}
+	MIN(f(\underline{x},y))=g(\underline{x})=
+	\begin{cases}
+		\mu y (f(\underline{x},y)=0) & \\
+		\perp &\textit{ se }\nexists  \textit{ tale } y
+	\end{cases}
+\end{displaymath}
+NOTA: la dicitura $MIN(f(\underline{x},y))=g(\underline{x})$ indica che la parte sinistra produce la funzione $g(x)$.
+\begin{algorithm}[h]
+        \begin{algorithmic}[1]
+        		 \State $INPUT(\underline{x})$
+        		 \State $\underline{BEGIN}$ 
+        		 \State $y:=0$ \Comment{output di $MIN(f)$}
+        		 \While{$F(\underline{x},y) \neq 0$} \Comment{posso scrivere $F(\underline{x},y)$ per ip.ind.: $F$ è in $WHILE$}
+        		 	\State $y:=y+1$
+        		 \EndWhile
+        		 \State $\underline{END}$
+        \end{algorithmic}
+    \end{algorithm}
+    \\
+Per induzione strutturare $P \subseteq F(WHILE)$.
+\subsubsection{Teorema $F(WHILE) \subseteq P$}
+Dimostrazione $F(WHILE)=\{ \Psi_w:w \in W-PROG \} \subseteq P = ELEM^{COMP,RP,MIN}$.
+
+
+
+$\Psi_W \in F(WHILE) \Rightarrow \Psi_W \in P=ELEM^{COMP,RP,MIN} \Rightarrow$ dimostro che $\Psi_W$ può essere espressa come composizione, ricorsione primitiva e minimalizzazione a partire da funzioni in $ELEM$.
+
+
+
+$Psi_w(x) = Pro_0^{21}([[w]](w-in(x)))$ con \begin{itemize}
+	\item $[[\_]](\_) :\mathbb{N}^{21} \rightarrow \mathbb{N}^{21}$ dove $[[c]](\underline{x})=\underline{y}$ è la funzione stato prossimo che calcola lo stato $y \in \mathbb{N}^{21}$ a seguito del comando $WHILE$ $c$ a partire dallo stato $\underline{x}\in \mathbb{N}^{21}$;
+	\item $w-in(x)$ prepara lo stato iniziale su input $x$;
+	\item $w \in W-PROG$ è un comando composto.
+\end{itemize}
+Possiamo quindi dire che $Psi_w(x) = Pro_0^{21}([[w]](w-in(x)))$ è composizione della funzione $Pro_0^{21} \in ELEM$ con la funzione stato prossimo $[[w]](w-in(x))$. Quindi
+\begin{enumerate}
+	\item $Pro_0^{21} \in ELEM \Rightarrow Pro_0^{21} \in P$;
+	\item $P$ è chiuso rispetto alla composizione;
+	\item se dimostro che $[[c]](\underline{x})=y \in P$ allora $\Psi_w \in P$.
+\end{enumerate}
+\underline{Dettaglio tecnico:} $[[\_]](\_):\mathbb{N}^{21} \rightarrow \mathbb{N}^{21}$ ha come codominio $\mathbb{N}^{21}$ mentre $P$, per come l'abbiamo definita, contiene funzioni che hanno codominio in $\mathbb{N}$; questo non è un problema perchè usiamo le coppie di Cantor. Quindi invece di mostrare $[[c]](\underline{x})=\underline{y} \in P$ con $\underline{x},\underline{y} \in \mathbb{N}^{21}$ mostreremo che $f_c(x)=y$ con $x=[\underline{x}]$ e $y=[\underline{y}]$ \underline{{CANTOR}}.
+
+\begin{displaymath}
+f_c(x) = y \Leftrightarrow [[c]](Pro(0,x),\dots,Pro(20,x))=(Pro(0,y),\dots,Pro(20,y))
+\end{displaymath}
+Posso andare da $f_c$ a $[[c]]$ e viceversa con operatori in $P:f_c\in P \Leftrightarrow [[c]] \in P$.
+
+
+
+Equivalentemente posso pensare che $[[c]] \in P$ perchè ogni componente dello stato prossimo $[[c]](\underline{x})$ è esprimibile come funzione ricorsiva parziale.
+
+
+\subsubsection{$F(WHILE) \subseteq P$ dimostrando che $f_c \in P$}
+Induzione strutturale sul comando $WHILE$ $c$:
+\begin{itemize}
+	\item $[BASE]$: 
+		\begin{itemize}
+			\item $c \equiv x_k:=0$: $f_{x_k=0}(x)=[Pro(0,x),\dots, 0, \dots, Pro(20,x)]$ con $0$ nella $k$-esima posizione, $Pro$ e $0$(funzione $O \in ELEM$) sono tutte funzioni in $P$, così come la loro composizione $\Rightarrow f_{x_k=0}(x) \in P$;
+			\item $c \equiv x_k:=x_j +/\dot{-} 1$: $f_{x_k:=x_j +/\dot{-} 1}(x)= [Pro(0,x),\dots, Pro(j,x)+/\dot{-}1, \dots, Pro(20,x)]$ nella posizione $k$-esima, ancora tutto in $P \Rightarrow f_{x_k:=x_j +/\dot{-} 1}(x) \in P$;
+		\end{itemize}
+	\item $[PASSI$ $INDUTTIVI]$:
+		\begin{itemize}
+			\item $c \equiv \underline{BEGIN}$ $c_1,\dots,c_m$ $\underline{END}$,per ipotesi induttiva $f_{c_i} \in P$. $f_c(x)=f_{c_m}(\dots,f_{c_i}(x),\dots)$, ogni $f_{c_i} \in P$ come la loro composizione.
+			\item $c' \equiv \underline{WHILE}$ $x_k \neq 0$ $\underline{do}$ $c$, ipotesi induttiva $f_c \in P$. 
+				\begin{displaymath}
+					f_{c'}(x)=f_c^{e(x)}(x) \textit{ con } e(x)=\mu y (Pro(k, f_c^y(x))=0
+				\end{displaymath}		
+				
+				$f^n$: composizione di funzione $n$ volte.
+				ATTENZIONE: $f_c^{e(x)}$ è la composizione di $f_c$ per $e(n)$ volte, che NON è un numero COSTANTE. So scrivere $COMP(h,g_1,\dots,g_k)$ con $k$ costante. Come rappresentare in $P$ la composizione di una funzione con se stessa un numero NON COSTANTE di volte? come rappresentare $T(x,y)=f_c^y(x)$ in $P$? 
+		
+\begin{displaymath}
+	T(x,y)=
+	\begin{cases}
+		x &\textit{ se } y=0 \\
+		f_c(T(x,y-1)) &\textit{ se } y>0
+	\end{cases}
+\end{displaymath}
+Quindi $T(x,y)=f_c^y(x)$ è un operatore ottenuto mediante ricorsione primitiva su una funzione $f_c \in P \Rightarrow T(x,y) \in P$.
+
+
+Dunque $f_{c'}=f_c^{e(x)}(x)$ con $e(x)=\mu y(Pro(x,f_c^y(x)=0) \Rightarrow$(quindi posso scrivere) $e(x)=\mu y (Pro(x,T(x,y))=0)$ ovvero minimalizzazione di funzione $T(x,y) \in P$ quindi $e(x) \in P$. Infine $f_{c'}(x)=f_c^{e(x)}(x)=T(x,e(x)$ composizione di funzioni in $P$ quindi $f_{c'} \in P$.
+
+
+
+\end{itemize}
+\end{itemize}
+
+Abbiamo dimostrato, per induzione strutturale, che $F(WHILE) \subseteq P$.
+
+
+\subsection{Tesi di Church-Turing}
+La classe delle funzioni intuitivamente calcolabili coincide con la classe $P$ delle funzioni ricorsive parziali. Con "intuitivamente calcolabile" intendiamo definito calcolabile da un modello di calcolo  "ragionevole" ( come i modelli forniti negli anni).
+
+
+
+La tesi di CHurch-Turing è una congettura. Non può essere un teorema in quanto non è possibile caratterizzare i modelli di calcolo ragionevoli che sono stati e verranno proposti in maniera completa.
+
+\section{Lezione 13}
 \end{document}

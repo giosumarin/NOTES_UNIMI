@@ -1422,4 +1422,132 @@ La classe delle funzioni intuitivamente calcolabili coincide con la classe $P$ d
 La tesi di CHurch-Turing è una congettura. Non può essere un teorema in quanto non è possibile caratterizzare i modelli di calcolo ragionevoli che sono stati e verranno proposti in maniera completa.
 
 \section{Lezione 13}
+\subsection{Prprietà auspicabili per un sistema di programmazione}
+Individueremo un sistema di programmazione con $\{ \Phi_i \}_{i \in \mathbb{N}}$=insieme delle funzioni calcolabili con quel sistema, $i \in \mathbb{N}$=programmi (codifica) di quel sistema.
+
+
+
+
+Per individuare queste proprietà auspicabili, prendiamo spunto dal sistema $RAM$:
+\begin{enumerate}
+	\item Potenza computazionale: $\{ \Phi_i \} \in P$, coerente con la tesi di Church-Turing. Proprietà che vorrei soddisfatta dai sistemi di programmazione che investigheremo;
+	\item Interprete universale: esiste un programma $u \in \mathbb{N}$ tale che $\forall x,n \in \mathbb{N}:\Phi_u(<x,n>)=\Phi_n(x)$. Indichiamo con $u$ l'interprete universale (scritto in $RAM$, interpreta ogni programma scritto in $RAM$)
+	\begin{enumerate}
+		\item $COMP: w-PROG \rightarrow PROG$ tale che $\forall w \in w-PROG \Phi_{COMP(w)}=\Psi_w$
+		\item $T_w$: interprete scritto in $WHILE$ di programmi $RAM$ tale che $\forall x,n \in \mathbb{N}:\Psi_{I_w}(<x,n>)=\Phi_n(x)$
+	\end{enumerate}
+	$COMP(I_w)=U\in PROG$. Per (a) vale $\Phi_U=\Psi_{I_w}$. Quindi, per (b), $\forall x,n \in \mathbb{N}: \Phi_U(<x,n>)=\Psi_{I_w}(<x,n>)=\Phi_n(x)$ quindi $u=cod(U)$ ($cod$=codifica). La presenza di un interprete universale nei sistemi di programmazione permette un' "algebra dei programmi" (trasformazione programmi).
+	
+	
+	
+	\item Teorema $S_1^1$: è possibile costruire automaticamente programmi più specifici da programmi più generali, ottenuti prefissando alcuni input. Se prendiamo per esempio il programma che somma due numero posso facilmente scrivere un programa che svolte $x+3$: imposto a 3 la $y$ e poi chiamo il programma generale ($x+y$).
+	In generale il programma $S_1^1$ implementa la funzione
+	\begin{displaymath}
+		S_1^1(n,y)=\overline{n} \textit{ tale che } \Phi_{\overline{n}}(x)=\Phi_n(x,y)
+	\end{displaymath}
+\end{enumerate}
+con $n$ codifica dei $P$ e due variabili di input $x, y$. Con $\overline{n}$ codifica del programma $\overline{P}$ a una variabile $x$ la cui semantica è identica a quella di di $P$ in cui fisso a $y$ il secondo input.
+
+\begin{algorithm}[h]
+	\caption{$\overline{n}=cod(\overline{P})$ con $\overline{P} \equiv$}
+        \begin{algorithmic}[1]
+        		 \State $R_0 \leftarrow R_0+1$
+        		 \State $\dots$
+        		 \State $R_0 \leftarrow R_0+1$ \Comment{$y$ volte}
+        		 \State $R_1 \leftarrow <R_1,R_0>$ \Comment{Creo input per $P$ $(*)$}
+        		 \State $R_0 \leftarrow 0$ \Comment{Azzero $R_0$ $(**)$}
+        		 \State $P$ \Comment{Richiamo $P$ su $R_1$}
+        \end{algorithmic}
+    \end{algorithm}
+    
+    
+Posso esplicitare la funzione $S_1^1$ come
+\begin{displaymath}
+	S_1^1(n,y)=\overline{n}=<0,\dots ,0, s, t,n>
+\end{displaymath}
+dove gli 0 $y$ volte rappresentano l'aritmetizzazione di $R_0 \leftarrow R_0+1$, $s$ rappresenta la codifica di $(*)$ e $t$ la codifica di $(**)$.
+
+
+
+
+Quali caratteristiche ha $S_1^1(n,y)$?
+\begin{enumerate}
+	\item è una funzione totale;
+	\item è programmabile
+\end{enumerate}
+quindi $S_1^1 \in T$ dove $T$ è l'insieme delle funzioni ricorsive totali.
+In sintesi, per $RAM$, esiste una funzione $S_1^1$ ricorsiva totale che accetta come argomenti:
+\begin{enumerate}
+	\item il codice $n$ di un programma che ha due input;
+	\item un valore $y$ cui fissare il secondo input
+\end{enumerate}
+e produce il codice $S_1^1(n,y)$ di un programma che si comporta come $n$ a cui il secondo input è fissato ad $y$.
+\paragraph{Teorema $S_1^1$}
+Dato $\{ \Phi_i \}$ $RAM$, esiste una funzione $S_1^1 \in T$ tale che $\forall n, x,y \in \mathbb{N}: \Phi_n(<x,y>)=\Phi_{S_i(n,y)}(x)$
+\paragraph{Teorema $S_n^m$} in generale, il teorema $S_n^m$ parte da programmi con $m+n$ input, in cui si dissano gli ultimi $n$ input.
+
+\subsection{Sistempi di programmazione accettabili (spa)}
+Le tre caratteristiche auspicabili, evidenziate per il sistema $RAM$, rappresenta i tre assiomi che caratterizzano i sistemi di programmazione su cui ci concentreremo:
+
+
+Un sistemi di programmazione $\{ \Phi_i \}$ si dice accettabile (spa) sse soddisfa: (ssiomi di Rogers):
+\begin{enumerate}
+	\item $\{ \Phi_i \}=P$ (aderisce alla tesi di Church-Turing);
+	\item $\exists u \in \mathbb{N}: \Phi_u(<x,n>)=\Phi_n(x)$ (esiste interprete universale);
+	\item $\exists  S_n^m \in T:\forall k \in \mathbb{N}, \underline{x} \in \mathbb{N}^m, \underline{y} \in \mathbb{N}^n$ vale $\Phi_k(<\underline{x},\underline{y}>)=\Phi_{S_n^m(k,\underline{y})}(<\underline{x})$
+	
+\end{enumerate} 
+
+Non sono assiomi assolutamente restrittuvi: tutti i modelli di calcolo "ragionevoli" sono di fatto spa.
+
+\subsubsection{Esistenza di compilatori tra spa}
+\underline{DEF.} Dati gli spa $\{ \Phi_i \}$ e $\{ \Psi_i \}$, un compilatore del primo al secondo spa è una funzione $t:\mathbb{N}\rightarrow \mathbb{N}$ tale che:
+\begin{enumerate}
+	\item Correttezza: $\forall i \in \mathbb{N}$ vale $\Phi_i=\Psi_{t(i)}$;
+	\item Compretezza: compila ogni $i \in \mathbb{N}$;
+	\item Programmabile: esiste un programma che implementa $t$.
+\end{enumerate}
+I punti 2 e 3 ci dicono che $t \in T$ (ricorsiva totale).
+
+
+
+In sintesi, un compilatore tra due spa è una funzione dai naturali ai naturali ricorsiva totale e corretta (mantiene la semantica).
+\paragraph{Teorema} Dati due spa,, esiste sempre un compilatore tra essi.
+
+\paragraph{Dimostrazione}
+Assiomi spa:
+\begin{enumerate}
+	\item $\{ \Phi_i \}=P$;
+	\item $\exists u \in \mathbb{N}: \Phi_u(<x,n>)=\Phi_n(x)$;
+	\item $\exists  S_n^m \in T: \Phi_k(<\underline{x},\underline{y}>)=\Phi_{S_n^m(k,\underline{y})}(<\underline{x})$.
+\end{enumerate} 
+
+Devo esibire $t \in T$ corretta (per definizione di compilatore):
+\begin{displaymath}
+	\Phi_i(x) =^{2)} \Phi_u(<x,i>) =^{1)} \Psi_e(<x,i>) =^{3)} \Psi_{S_1^1(e,i)}(x) \textit{  }(*)
+\end{displaymath}
+Il compilatore cercato è la funzione $t(i)=S_1^1(e,i)$, per ogni $i \in \mathbb{N}$. $e$ è fissato: è quella $e$ tale che $\Phi_u=\Psi_e$. Infatti:
+\begin{enumerate}
+	\item $t \in T$ in quanto $S_1^1$ (3))
+	\item $t$ è corretta: $\Phi_i=\Psi_{t(i)}$ per $(*)$.
+\end{enumerate}
+\paragraph{Corollario} Dati gli spa $A,B,C$, esiste sempre un compilatore da $A$ a $B$ scritto nel linguaggio $C$.
+\paragraph{Dimostrazione}
+Per il teorema precedente, esiste il compilatore $t \in T$ da $A$ a $B$. Poichè $C$ è un spa, per l'assioma 1), $C$ contiene programmi per tutte le funzioni ricorsive parziali. Dunque, contiene un programma anche per $t$ che è funzione ricorsiva totale.
+
+
+
+In pratica, cio vuol dire che per qualunque coppia di linguaggi esistenti e che verranno progettati in futuro, sarò sempre in grado di scrivere un compilatore tra essi nel mio linguaggio preferito.
+
+\subsubsection{Un risultato più forte}
+\paragraph{Teorema di isomorfismo tra spa (Rogers)}
+Dati due spa $\{ \Phi_i \}$ e $\{ \Psi_i \}$, esiste $t:\mathbb{N} \rightarrow \mathbb{N}$ tale che:
+\begin{enumerate}
+	\item $t \in T$
+	\item $\forall i \in \mathbb{N}:\Phi_i=\Psi_{t(i)}$, con il punto sopra: esistenza del compilatore da $\{ \Phi_i \}$ e $\{ \Psi_i \}$, teorema precedente;
+	\item $t$ è invertibile: $t^{-1}$ è un DECOMPILATORE (tornare esattamente al listato del primo, stessa sintassi).
+\end{enumerate}
+
+
+\section{Lezione 14}
 \end{document}

@@ -1550,4 +1550,204 @@ Dati due spa $\{ \Phi_i \}$ e $\{ \Psi_i \}$, esiste $t:\mathbb{N} \rightarrow \
 
 
 \section{Lezione 14}
+\subsection{Quesiti}
+\subsubsection{I quesito: Programmi autoreplicanti}
+Dato un spa, esistono all'intenro di esso progreammi che stampano se stessi (il proprio listato)?
+Questi programmi sono detti \underline{Quine}. Se ne possono trovare in svariati linguaggio come Python, Java, C, C++, $\dots$
+
+
+
+In $RAM$ il quesito può essere posto come $\exists j \in \mathbb{N}:\Phi_j(x)=j \forall x \in \mathbb{N}$?
+
+
+
+\subsubsection{II quesito: compilatore completamente errato}
+Dato due spa $\{ \Phi_i \}$ e $\{ \Psi_j \}$, un compilatore dal primo al secondo è una funzione $t:\mathbb{N} \rightarrow \mathbb{N}$ che sia:
+\begin{enumerate}
+	\item $t \in T$ (programmabile e totale);
+	\item $\forall i \in \mathbb{N}: \Phi_i = \Psi_{t(i)}$ (corretta, mantiene la semantica).
+\end{enumerate}
+Un compilatore completamente errato è una funzione $t:\mathbb{N} \rightarrow \mathbb{N}$ che sia:
+\begin{enumerate}
+	\item $t \in T$ (programmabile e totale);
+	\item $\forall i \in \mathbb{N}: \Phi_i \neq \Psi_{t(i)}$ (completamente errato).
+\end{enumerate}
+
+
+
+
+\subsection{Teorema di ricorsione [TR]}
+Dato un spa, $\{ \Phi_i \}$, per ogni $t:\mathbb{N} \rightarrow \mathbb{N}$ ricorsiva totale vale: $\exists n \in \mathbb{N}:\Phi_n=\Phi_{t(n)}$.
+
+
+
+
+Una chiave di lettura del teorema:
+\begin{itemize}
+	\item considero $t$ come un programma che trasforma programmi: prende in ingresso un programma $n$ e lo scambia con un programma $t(n)$, anche nella maniera più assurda;
+	\item il teorema dice che $t$ può essere la manipolazione più assurda possibile, ma esiste sempre almeno un programma il cui significato con sarà stravolto da $t$.
+\end{itemize}
+
+\subsubsection{Risposta al I quesito}
+Consideriamo il programma $P$ in $RAM$ che somma 1 al registro $R_0$ $j$-volte. $COD(P)=<0,\dots,0,>=Z(j)\in T$. La codifica avrà quindi $0$ (aritmetizzazione di $R_0=R_0+1$), ripetuto $j$ volte in cantor. Quindi $\Phi_{Z(j)}=j$.
+
+
+
+Per TR:
+\begin{displaymath}
+	\exists j \in \mathbb{N}: \Phi_j(x)=\Phi_{Z(j)}(x)=j \Rightarrow \exists j \in \mathbb{N}:\Phi_j(x)=j
+\end{displaymath}
+I quesito: SI!!! per $RAM$, in generale per tutti gli spa che ammettono sempre codifiche di programi.
+
+\subsubsection{Risposta al II quesito}
+Assiomi spa:
+\begin{enumerate}
+	\item $\{ \Phi_i \}=P$;
+	\item $\exists u \in \mathbb{N}: \Phi_u(<x,n>)=\Phi_n(x)$;
+	\item $\exists  S_n^m \in T: \Phi_k(<\underline{x},\underline{y}>)=\Phi_{S_n^m(k,\underline{y})}(<\underline{x})$.
+\end{enumerate}
+Considero una qualunque trasformazione di programmi $t \in T$.
+\begin{displaymath}
+	(*) \textit{  } \Psi_{t(i)}=^{2)} \Psi_u(x,t(i))=^{1)}=\Phi_e(x,t(i))=^{3)} \Phi_{S_1^1(e,t(i))}(x)=
+\end{displaymath}
+Cosideriamo $S_1^1(e,t(i))$: questa è una funzione a 1 varibile in quanto $e$ è fissato, in aggiunta $S_1^1$ e $t(i)$ sono funzioni totali. Quindi:
+\begin{displaymath}
+	= \Phi_{g(i)}(x)
+\end{displaymath}
+Per TR: $\exists i \in \mathbb{N}: \Phi_i=\Phi_g(i) \textit{   } (**)$
+
+
+
+$(*)+(**) \Rightarrow \exists i \in \mathbb{N}:\Psi_{t(i)}=\Phi_i \forall t \in T$.
+La risposta è quindi NO!!!
+
+\subsubsection{Dimostrazione TR}
+Dato un spa $\{ \Phi_i \}$, $\forall t:\mathbb{N}\rightarrow \mathbb{N} \in T \exists n \in \mathbb{N} \textit{ t.c. } \Phi_n=\Phi_{t(n)}$. 
+Per semplicità scriveremo $\Phi_n(x,y)$ per $\Phi_n(<x,y>)$.
+\begin{displaymath}
+	\Phi_{\Phi_i(i)}(x) =^{2)} \Phi_{\Phi_u(i,i)}(x) =^{2)} \Phi_u(x,\Phi_i(i))=\textit{composizione di funzioni $\in P$}=f(x,i) \in P = \dots
+\end{displaymath}
+Diamo qualche spiegazione/dettaglio ai passaggi fatti:
+\begin{itemize}
+	\item ${\Phi_i(i)}$ è un numero, l'output del programma $i$  su input $i$;
+	\item $\Phi_u(x,\Phi_i(i))$ è una funzione in due variabili: $i$, $x$;
+\end{itemize}
+Continuiamo ora la sequenza di ugualianze:
+\begin{displaymath}
+	\dots =^{1)} \Phi_e(x,i)=^{3)}= \Phi_{S_1^1(e,i)}(x) \textit{   } (*)
+\end{displaymath}
+Possiamo usare "l'operazione" $=^{1)}$ perchè abbiamo in programma per ogni funzione in $P$ (assioma 1 degli spa).
+
+
+
+
+Ora considero $t(S_1^1(e,i))$: è una funzione in $i$ ricorsiva totale perchè composizione di $t$ e $S_1^1 \Rightarrow^{1)}$
+\begin{displaymath}
+	\exists m \in \mathbb{N}:\Phi_m(i)=t(S_1^1(e,i)) \textit{   } (**)
+\end{displaymath}
+Pongo $n=S_1^1(e,m)$. Mostriamo che per tale $n$ vale $Phi_n=\Phi_{t(n)}$.
+Riassumiamo le vare equazioni e l'assegnamento che abbiamo appena fatto:
+\begin{itemize}
+	\item $\Phi_{\Phi_i(i)}(x) =  \Phi_{S_1^1(e,i)}(x) \textit{   } (*)$;
+	\item $\Phi_m(i)=t(S_1^1(e,i)) \textit{   } (**)$;
+	\item $n=S_1^1(e,m)$.
+\end{itemize}
+Quindi:
+\begin{enumerate}
+	\item $\Phi_n(x) = \Phi_{S_1^1(e,m)}(x) =^{(*)} \Phi_{\Phi_m(m)}(x)$;
+	\item $\Phi_{t(n)}(x) = \Phi_{t(S_1^1(e,m)}(x) =^{(**)} = \Phi_{\Phi_m(m)}(x)$
+\end{enumerate}
+QUINDI $\Phi_n=\Phi_{t(n)}$.
+
+\section{Lezione 15}
+\subsection{Problemi di decisione}
+Definiti in modo generale da:
+\begin{itemize}
+	\item NOME = nome del problema di decisione;
+	\item ISTANZA (generica) = dominio degli oggetti che verranno considerati;
+	\item DOMANDA = proprietà che gli oggetti del dominio possono soddisfare o meno; dato un oggetto del dominio, devo rispondere SI se l'oggetto soddisfa la proprietà, altrimenti rispondo NO.
+\end{itemize}
+Una descrizione più formale è:
+\begin{itemize}
+	\item $\Pi$ = nome del problema;
+	\item ISTANZA: $x \in D$
+	\item DOMANDA: $p(x)?$, oggetto $x \in D$ soddisfa la proprietà $p \Leftrightarrow p(x)$ è vera? 
+\end{itemize}
+\paragraph{Esempi}
+
+\begin{itemize}
+	\item PARITA'
+	\item ISTANZA: $n \in \mathbb{N}$ (un numero dato in input si chiamano istanze particolari)
+	\item DOMANDA: $n$ è pari?
+\end{itemize}
+
+
+
+
+------------
+
+
+
+\begin{itemize}
+	\item EQUAZIONI DIOFANTEE
+	\item ISTANZA: $a,b,c \in \mathbb{N}^+$
+	\item DOMANDA: $\exists x,y \in \mathbb{Z}:ax+by=c$?
+\end{itemize}
+
+\subsubsection{Decidibilità}
+$\Pi$ è decidibile sse $\exists$ programma $P_{\Pi}$ t.c. $\forall x \in D:$ 1 se $p(x)$; 0 se $\neg p(x)$.
+
+
+
+Equivalentemente: associamo a $\Pi$ la sua funzione soluzione:
+\begin{displaymath}
+	\Phi_\Pi: D \rightarrow \{0,1\}\textit{ tale che }\Phi_\Pi(x)=
+	\begin{cases}
+		1 &\textit{ se } p(x) \\
+		0 &\textit{ se } \neg p(x) 
+	\end{cases}
+\end{displaymath}
+$\Pi$ è decidibile sse $\Phi_\Pi \in T$.
+Le due definizioni si equivalgono:
+\begin{enumerate}
+	\item il programma $P_\Pi$ calcola $\Phi_\Pi \Rightarrow \Phi_\Pi \in T$;
+	\item se $\Phi_\Pi \in T$ allora esiste un programma che calcola $\Phi_\Pi$ e che il comportamenti di $\P_\Pi$.
+\end{enumerate}
+
+
+
+
+Dato il problema di decisione $\Pi$, posso dimostrare la decidibilità in questi due modi:
+\begin{enumerate}
+	\item esibendo l'algoritmo di soluzione, oppure
+	\item mostrare che $\Phi_Pi$ è ricorsiva totale.
+\end{enumerate}
+\paragraph{Esempi}
+\begin{enumerate}
+	\item PARITA' ($PR$): $\Phi_{PR}(n) = 1 \dot{-} (n \textit{ mod }2) \in T$
+	\item EQ DIOFANTEA ($ED$): $\Phi_{ED}(a,b,c) = 1 \dot{-} (c \textit{ mod }(\textit{mcd }(a,b)) \in T$
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}

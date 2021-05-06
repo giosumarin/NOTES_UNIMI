@@ -1728,12 +1728,94 @@ Dato il problema di decisione $\Pi$, posso dimostrare la decidibilità in questi
 	\item EQ DIOFANTEA ($ED$): $\Phi_{ED}(a,b,c) = 1 \dot{-} (c \textit{ mod }(\textit{mcd }(a,b)) \in T$
 \end{enumerate}
 
+\subsubsection{Esistono problemi indecidibili?}
+Problema dell'arresto per un programma $P$:
+\begin{itemize}
+	\item $AR_P$
+	\item istanza: $x \in \mathbb{N}$
+	\item domanda: $\phi_P(x)\downarrow$? = $P$ su input $x$ termina?
+\end{itemize}
+$AR_P$ è decidibile? Dipende da $P$ (nota: $P$ è fissato)
 
 
 
 
 
 
+
+Con $P$ che fa $x+1$ la funzione soluzione è $\Phi_{AR_P}(x)=1 \in T$.
+
+
+
+
+Con $P$ che restituisce l'input se è pari e va in loop se dispari, la funzione soluzione è $\Phi_{AR_P}(x)=1 \dot{-} (x$ $mod$ $2 \in T$.
+
+
+
+
+In questi due casi $AR_P$ è decidibile.
+\paragraph{Un problema indecidibile}
+\begin{algorithm}[!h]
+	\caption{$\hat{P} \equiv$}
+        \begin{algorithmic}[1]
+        		 \State $input(x)$
+        		 \State $z:=U(x,x)$ \Comment{interpr. univ. $\phi_U(x,n)=\phi_n(x)$}
+        \end{algorithmic}
+    \end{algorithm}
+    
+Qual è la semantica di $\hat{P}$? $\phi_{\hat{P}}(x)=\phi_U(x,x)=\phi_x(x)$.
+\begin{itemize}
+	\item $AR_{\hat{P}}$
+	\item istanza: $x \in \mathbb{N}$
+	\item domanda: $\phi_P(x)\downarrow$? 
+\end{itemize}
+Da notare che ora il programma non è fissato come negli esempi precedenti ma dipende dall'input. $AR_{\hat{P}}$ è indecidibile! Dimostrazione nella prossima lezione.
+
+\section{Lezione 16}
+\subsection{Indecidibilità di $AR_{\hat{P}}$}
+Dimostrazione per assurdo: assumiamo $AR_{\hat{P}}$ decidibile quindi
+\begin{displaymath}
+	\Phi_{AR_{\hat{P}}}(x)=\begin{cases}
+		1 &\textbf{ se } \phi_{\hat{P}}(x)=\phi_x (x) \downarrow \\
+		0 &\textbf{ se } \phi_{\hat{P}}(x)=\phi_x (x) \uparrow
+	\end{cases}
+\end{displaymath}
+è ricorsiva totale quindi calcolata da un programma $P_{AR_{\hat{P}}}$ che termina sempre. Se $\Phi_{AR_{\hat{P}}} \in T$ allora anche la seguenze funzione è ricosiva totale
+\begin{displaymath}
+	f(x)=\begin{cases}
+		0 &\textbf{ se } \phi_{AR_{\hat{P}}}(x)=0 \equiv \phi_x (x) \uparrow \\
+		\phi_{\hat{P}}+1 &\textbf{ se } \phi_{AR_{\hat{P}}}(x)=1 \equiv \phi_x (x) \downarrow 
+		
+	\end{cases}
+\end{displaymath}
+in quanto è facilmente implementabile con il programma $A$.
+\begin{algorithm}[!h]
+	\caption{$A$}
+        \begin{algorithmic}[1]
+        		 \State $input(x)$
+        		 \If{$P_{AR_{\hat{P}}} == 0$}
+        		 	\State $output(0)$
+        		 \Else
+        		 	\State $output(U(x,x)+1$
+        		 \EndIf
+        \end{algorithmic}
+    \end{algorithm}
+    
+Quindi $\phi_\alpha=f$. Valutiamo $\phi_\alpha$ in $\alpha$ (ovvero sostituiendo $x$ con $\alpha$ nella funzione sopra)
+\begin{displaymath}
+	\Phi_{\alpha}(\alpha)=\begin{cases}
+		0 &\textbf{ se } \phi_\alpha (\alpha) \uparrow \\
+		\phi_\alpha (\alpha)+1 &\textbf{ se } \phi_\alpha (\alpha) \downarrow 
+		
+	\end{cases}
+\end{displaymath}
+Tale funzione non può esistere: 
+\begin{itemize}
+	\item ramo 0: restituisce 0 se non termina ma non terminando non restituisce.. contraddizione;
+	\item ramo $\phi_\alpha (\alpha)+1$: abbiamo $\phi_\alpha (\alpha) = \phi_\alpha (\alpha)+1$ che non vale per nessun naturale.. contraddizione
+\end{itemize}
+In conclusione, assumere $AR_{\hat{P}}$ decidibile porta a un assurdo e quindi $AR_{\hat{P}}$ è indecidibile.
+\subsection{Il problema generale dell'arresto}
 
 
 

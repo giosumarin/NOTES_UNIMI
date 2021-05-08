@@ -1816,14 +1816,163 @@ Tale funzione non può esistere:
 \end{itemize}
 In conclusione, assumere $AR_{\hat{P}}$ decidibile porta a un assurdo e quindi $AR_{\hat{P}}$ è indecidibile.
 \subsection{Il problema generale dell'arresto}
+\begin{itemize}
+	\item ARRESTO ($AR$)
+	\item istanza: $x,y \in \mathbb{N}$ ($x$=dato, $y$=programma)
+	\item domanda: $\phi_y(x)\downarrow$?
+\end{itemize}
+è indecidibile.
+
+
+
+
+Assumiamo, per assurdo, $AR$ decidibile $\Rightarrow$ esiste un programma $P_{AR}(x,y)$ che lo risolve: $P_{AR}(x,y)$ restituisce 1 se $\phi_y(x)\downarrow$, altrimenti restutuisce 0.
+
+
+
+
+Il seguente programma decide $AR_{\hat{P}}: input(x)$ - $output(P_{AR}(x,x))$. Ma abbiamo appena mostrato che $AR_{\hat{P}}$ è indecidibile, per cui non può esistere alcun programma per la sua soluzione.
+
+
+
+In concludione, assumere $AR$ decidibile porta a un assurdo e quindi $AR$ è indecidibile.
+
+
+
+
+\subsection{Riconoscibilità Automatica di Insiemi}
+$A \subseteq \mathbb{N}$ è riconoscibile automaticamente se esiste un progrmma $P_A$ che classifica correttamente ogni elementi di $\mathbb{N}$ come appartenente o meno ad $A$.
+
+
+
+
+$P_A$ è corretto e termina su ogni input.
 
 
 
 
 
+Quali insiemi possono essere automaticamente riconosciuti? Quali no?
+
+\subsubsection{Insiemi Ricosivi}
+$A \subseteq \mathbb{N}$ è un insieme ricorsivo sse esiste un programma $P_A$ che si arresta su ogni input classificando correttamente gli elementi di $\mathbb{N}$ in base alla loro apparteneza o meno ad $A$.
 
 
 
+
+\paragraph{Equivalentemente} Funz. caratteristica di $A \subseteq \mathbb{N}$ è la funzione $\chi_A:\mathbb{N}\rightarrow\{0,1\}$ t.c.: $\chi_A(x)=1$ se $x \in A$; 0 altrimenti. $A$ è ricorsivo sse $\chi_A \in T$.
+
+
+
+
+Le due definizioni sono equivalenti:
+\begin{itemize}
+	\item $P_A$ implementa $\chi_A$ $\Rightarrow$ $\chi_A \in T$.
+	\item $\chi_A \in T$ $\Rightarrow$ un programma che lo implementa soddisfa la definizione che abbiamo dato all'inizio di questa sezione.
+\end{itemize}
+
+
+
+\subsubsection{Ricorsivo vs. decidibile}
+Spesso, con abuso di linguaggio, si dice che un insieme ricorsvi $A \subseteq \mathbb{N}$ è decidibile. Questo perchè ad ogni insieme $A \subseteq \mathbb{N}$ possiamo associare il corrispondente problema di riconoscimento:
+\begin{itemize}
+	\item $RIC_A$ $\leftarrow$ funzione soluzione: $\Phi_{RIC_A}:\mathbb{N}\rightarrow \{0,1\}$
+	\item istanza: $ x \in \mathbb{N}$
+	\item domanda: $x \in A$?
+	
+\end{itemize}
+\begin{displaymath}
+	\Phi_{RIC_A}(x)=\begin{cases}
+		1 &\textit{ se } x \in A \\
+		0 &\textit{ se } x \cancel{\in} A
+	\end{cases}
+\end{displaymath}
+chiaramente abbiamo che $\Phi_{RIC_A}=\chi_A$ e se $A$ è ricorsivo allora otteniamo che:
+\begin{displaymath}
+	\Phi_{RIC_A} = \chi_a \in T \Rightarrow \Phi_{RIC_A} \in T \Rightarrow \textit{${RIC_A}$ è decidibile}.
+\end{displaymath}
+
+
+
+
+
+Sicuramente, sempre con abuso di linguaggio, si diche che un problema di decisione decidibile $\Pi$ è ricorsivo. Questo perchè ad ogni problema di decisione $\Pi$ posso associare l'insieme $A_{\Pi}$ delle sue instanze a risposta positiva.
+\begin{itemize}
+	\item $\Pi$
+	\item istanza: $x \in D$
+	\item domanda: $p(x)$?
+\end{itemize}
+$\Rightarrow A_{\Pi}=\{ x \in D: \Phi_{\Pi}(x)=1 \}$ ($(\Phi_{\Pi}(x)=1 \equiv p(x)$)
+
+
+
+
+
+Se $\Pi$ è decidibile allora $\Phi_{\Pi} \in T$ e quindi un programma che calcola $\Phi_{\Pi}$ riconosce automaticamente l'insieme $A_{\Pi} \Rightarrow A_{\Pi}$ è ricorsivo.
+\paragraph{Esempi di insiemi ricorsivi}
+Pari, dispari, primi e qualsiasi insieme $A_{\Pi}$ con $\Pi$ decidibile.
+\begin{itemize}
+	\item $ED$
+	\item istanza: $a,b,c \in \mathbb{N}^+$
+	\item domanda: $\exists x,y \in \mathbb{Z}:ax+by=c$?
+\end{itemize}
+$\Rightarrow A_{\Pi} \subseteq {\mathbb{N}^+}^3$ definito come $A_{\Pi}= \{ (a,b,c) \in {\mathbb{N}^+}^3: \exists x,y \in \mathbb{Z} (ax+by=c) \}$.
+
+
+\subsubsection{Relazioni ricorsive}
+$R \subseteq \mathbb{N}\times \mathbb{N}$ è una relazione ricorsiva sse l'insieme $R$ è ricorsivo: $\chi_R \in T$, o equivalentemente, esiste un programma $P_R$ che prende in input una coppia $x,y$ tale che da 1 se $xRy$, 0 altrimenti.
+\paragraph{una relazione ricorsiva $R$} $xRy$ sse $x$ divide $y$; $R= \{ (x,y) \in \mathbb{N}^2: \exists k \in \mathbb{N}(y=k\dot x)\}$.
+
+
+
+$\chi_R:\mathbb{N}^2 \rightarrow \{0,1\}$ può essere definita come $\chi_R(x,y)=1\dot{-}(y$ $mod$ $x$). Chiaramente, $\chi_R \in T \Rightarrow$ $R$ è ricorsiva.
+
+
+
+
+Alternativamente, sarebbe semplice scriver eun programma che testa la divisibilità tra il secondo e il primo input.
+\subsection{Un'importante Relazione Ricorsiva}
+Dato un programma $P$, si definisce:
+\begin{displaymath}
+	R_P=\{ (x,y) \in \mathbb{N}^2: P\textit{ su input $x$ termina in al più $y$ passi} \}
+\end{displaymath}
+$R_P$ è una relazione ricorsiva. Possiamo costruire un programma che implementa $R_P$ come: $\tilde{U}=U+clock+checkclock$ con:
+\begin{itemize}
+	\item $U$ interprete universale;
+	\item $clock$ variabile che si incrementa di 1 ad ogni passo di interpretazione;
+	\item $checkclock$ timeout sul tempo di interpretazione.
+\end{itemize}
+
+\begin{algorithm}[h]
+	\caption{$\tilde{U}\equiv$}
+        \begin{algorithmic}[1]
+        		 \State $input(x,y)$
+        		 \State $U(P,x)$
+        		 \State $ \textit{ad ogni passo di $U(P,x)$} if clock$ $>$ $y$ $output(0)$ 
+        		 \State $output(1)$
+        		  
+        \end{algorithmic}
+    \end{algorithm}
+Nel sistema $RAM$, posso controllare che $P$ si è arrestato verificando se $S(L)=0$ o meno.
+
+\subsubsection{Ancora sull'Insieme dell'arresto A}
+\begin{itemize}
+	\item $AR_{\hat{P}}$
+	\item istanza: $x \in \mathbb{N}$
+	\item domanda: $\phi_{\hat{P}}(x)=\phi_x(x)$? $\Rightarrow A= \{ x in \mathbb{N}:\phi_x(x)\downarrow \}$=non ricorsivo
+\end{itemize}
+Come esprimere $A$ attraverlo la relazione $R_{\hat{P}}$?
+
+\begin{displaymath}
+	B= \{ x in \mathbb{N}: \exists y \in \mathbb{N} (x R_{\hat{P}} y \}
+\end{displaymath}
+\paragraph{$A=B$}
+\begin{itemize}
+	\item $A\subseteq B$: $x \in A \Rightarrow$ il programma $x$ su input $x$ termina in $y$ passi $\Rightarrow$ $\hat{P}(x)$ termina in $y$ passi $\Rightarrow (x,y) \in R_{\hat{P}} \Rightarrow x \in B$.
+	\item $B \subseteq A$: $x \in B \Rightarrow x R_{\hat{P}} y \Rightarrow \hat{P}$ termina in $y$ passi $\Rightarrow$ il programma $x$ su input $x$ termina in $y$ passi $\Rightarrow x \in A$ 
+\end{itemize}
+
+\section{Lezione 17}
 
 
 

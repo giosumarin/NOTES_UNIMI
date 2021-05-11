@@ -1011,7 +1011,7 @@ Dato un insieme $U$, si definisce un'operazione su $U$ una qualunque funzione $o
 \paragraph{Esempi} $U=\mathbb{N}$
 \begin{itemize}
 	\item $+:\mathbb{N} \times \mathbb{N} \rightarrow \mathbb{N}$, somma: $+(5,3)=8$, operazione binaria;
-	\item $\lfloor \sqrt{} : \mathbb{N} \rightarrow \mathbb{N}$, radice troncata, operazione unaria;
+	\item $\lfloor \sqrt{} \rfloor: \mathbb{N} \rightarrow \mathbb{N}$, radice troncata, operazione unaria;
 	\item $Pro_t^n: \mathbb{N} \times \dots \times \mathbb{N} \rightarrow \mathbb{N}$ con $n$ volte in input, proiezione $t$-esima, operazione $n$-aria.
 \end{itemize}
 \subsubsection{Chiusura}
@@ -1973,6 +1973,228 @@ Come esprimere $A$ attraverlo la relazione $R_{\hat{P}}$?
 \end{itemize}
 
 \section{Lezione 17}
+\subsection{Insiemi ricorsivamente numerabili}
+$A \subseteq \mathbb{N}$ ricorsivamente numerabile è sinonimo di $A$ automaticamente listabile: esiste routine $F$ che su input $i \in \mathbb{N}$ da in output $F(i)$ come l'$i$-esimo elemento di $A$.
+Il programma che lista tutti gli elementi di $A$ è un semplice while(true) con $i$ che parte da 0 e chiama $F(i)$. 
+
+
+
+
+Per alcuni insiemi è il meglio che ho, non so riconoscere "esattamente" l'insieme ma posso listarlo.
+
+
+
+
+
+
+
+Se il meglio che posso avere per $A \subseteq \mathbb{N}$ è una lista, come posso crivere un algoritmo che "tenta di riconoscere" $A$?
+
+\begin{algorithm}[h]
+	\caption{$P\equiv$}
+	\label{parzric}
+        \begin{algorithmic}[1]
+        		 \State $input(x)$
+        		 \State $i:=0$
+        		 \While{$F(i) \neq x$}
+        		 	\State $i:= i+1$
+        		 \EndWhile
+        		 \State $output(1)$
+        		  
+        \end{algorithmic}
+    \end{algorithm}
+    
+$P$ va in loop quando un elemento non papartiene. Ricorsivamente numerabile equivale a parzialmente riconoscibile o semidecidibile.
+
+
+\subsubsection{Descrizione formale}
+Insieme $A \subseteq \mathbb{N}$ è ricorsivamente numerabile sse:
+\begin{itemize}
+	\item $A=\emptyset$;
+	\item $A=Im_f$ con $f:\mathbb{N}\rightarrow\mathbb{N} \in T$ ($A=\{ f(0), f(1), \dots \}$)
+\end{itemize}
+Poichè $f \in T$, esiste un programma chee lo implementa e che consente l'algoritmo parziale di riconoscimento di $A$:
+\begin{itemize}
+	\item se $x \in A$ allora $P$ si arresta e stampo 1;
+	\item se $x \cancel{\in} A $  allora $P$ entra in loop.
+\end{itemize}
+
+\subsubsection{Alcune caratteristiche degli insiemi ricorsivamente numerabili}
+\paragraph{Teorema} Le seguenti definizioni sono equivalenti:
+\begin{enumerate}
+	\item $A$ è ricorsivamente numerabile ($A=Im_{f \in T}$)
+	\item $A=Dom_f$ con $f \in P$
+	\item esiste una relazione $R \subseteq \mathbb{N}^2$ ricorsiva t.c.:
+	\begin{displaymath}
+		A=\{ x \in \mathbb{N}: \exists y \in \mathbb{N} (x,y) \in R \}
+	\end{displaymath}
+\end{enumerate}
+\paragraph{$1 \Rightarrow 2$ Dimostrazione circolare} 
+Considero l'algoritmo di riconoscimento parziale di $A$ (il programma $P$ Algorithm~\ref{parzric}).
+\begin{displaymath}
+	\phi_P(x)=\begin{cases}
+		1 &\textit{ se } x \in A \\
+		\perp &\textit{ se } x \cancel{\in} A
+	\end{cases}
+\end{displaymath}
+$\Rightarrow A=Dom_{\phi_P}$. $Dom_{\phi_P}$ è il dominio della funzione dove è definita quindi i punti per cui $\phi_P(x)=1$. Ovviamente $\phi_P \in P$.
+
+\paragraph{$2 \Rightarrow 3$ Dimostrazione circolare} 
+Se $f \in P$ allora esiste un programma $P$ t.c. $f=\phi_P$. Considero allora $R_P=\{ (x,y) \in \mathbb{N}^2:\textit{ $P$ su input $x$ termina in $y$ passi} \}$ relazione ricorsiva.
+
+
+
+
+
+Definiamo quindi $B= \{ x | \exists y \in \mathbb{N} (x,y) \in R_P \}$. Abbiamo che $A=B$, infatti:
+\begin{itemize}
+	\item $A \subseteq B: x \in A \Rightarrow$ il programma $P$ sun input $x$ si arresta in un certo numero $y$ di passi $\Rightarrow (x,y) \in R_P \Rightarrow x \in B$;
+	\item $B \subseteq A: x \in B \Rightarrow (x,y) \in R_P$ per un certo $y \Rightarrow$ $P$ su input $x$ termina in $y$ passi (ci interessa che termina, non in quanto) $\Rightarrow \phi_P(x)\downarrow \Rightarrow x \in Dom_{\phi_P} \Rightarrow x \in A$.
+\end{itemize} 
+
+Quindi $A=B$.
+
+\paragraph{$3 \Rightarrow 1$ Dimostrazione circolare} 
+Assumo $A \neq \emptyset$ e scegliamo $a \in A$ (assioma della scelta). Definiamo $t:\mathbb{N} \rightarrow \mathbb{N}$ come:
+\begin{displaymath}
+	t(n)=\begin{cases}
+		sin(n) & \textit{ se } (sin(n),des(n)) \in R \\
+		a & \textit{ altrimenti }
+	\end{cases}
+\end{displaymath}
+Poichè $R$ ricorsiva esiste un programma $P_R$ che la implementa. Dunque il seguente programma implementa la funzione $t$ quindi ricorsivo totale:
+
+\begin{algorithm}[h]
+        \begin{algorithmic}[1]
+        		 \State $input(n)$
+        		 \State $x:=sin(n)$
+        		 \State $y:=des(n)$
+        		 \If{$P_R(x,y)$}
+        		 	\State $output(x)$
+        		 \Else
+        		 	\State $output(a)$
+        		 \EndIf
+        		  
+        \end{algorithmic}
+    \end{algorithm}
+
+\begin{itemize}
+	\item $A \subseteq Im_t: x \in A \Rightarrow (x,y) \in R \Rightarrow  t(<x,y>)=x \Rightarrow x \in Im_t$
+	\item $Im_t \subseteq A:x \in Im_t \Rightarrow x=a \in A$ oppure $x=sin(n)$ con $n=<x,y>$ per qualunque $y$ t.c. $(x,y) \in R \Rightarrow x \in A$.
+\end{itemize}
+
+
+
+
+Particolarmente utile è il punto 2: per mostrare che $A$ è ricorsivamente numerabile:
+\begin{enumerate}
+	\item Scrivo un programma $P$ che da output 1 se input in $A$ e va in loop altrimenti;
+	\item cioè $\phi_P(x):
+		\begin{cases}
+			1 &\textit{ se } x \in A\\
+			\perp &\textit{ se } x \cancel{\in} A
+		\end{cases}$
+	\item chiaramente $\phi_P \in P$ (ric. parz) e $A=Dom_{\phi_P}$;
+	\item $A$ è ricorsivamente numerabile
+\end{enumerate}
+   
+
+\subsubsection{Un insieme ricorsivamente numerabile}
+\begin{itemize}
+	\item $AR_{\hat{P}}$
+	\item istanza: $x \in \mathbb{N}$
+	\item domanda: $\phi_{\hat{P}}=\phi_x(x)\downarrow$?
+\end{itemize}
+$A$ non è rcirsivo altrimenti $AR_{\hat{P}}$ sarebbe decidibile.
+$A$ è ricorsivamente numerabile infatti:
+
+\begin{algorithm}[h]
+	\caption{$P \equiv$}
+        \begin{algorithmic}[1]
+        		 \State $input(x)$
+        		 \State $U(x,x)$
+        		 \State $output(1)$
+        \end{algorithmic}
+    \end{algorithm}
+    
+Con $\phi_P=\begin{cases}
+			1 &\textit{ se } \phi_x(x)\downarrow \\
+			\perp &\textit{ altrimenti} \end{cases}$.
+			
+			
+Chiaramente $A=Dom_{\phi_{P \in P}}\Rightarrow$ applico 2. 
+
+
+
+
+Oppure usando 3:
+\begin{displaymath}
+	A=\{ x: \phi_x(x)\downarrow \} = \{ x: \exists y ((x,y) \in R_{\hat{P}} \} \textit{ con relazione } R_{\hat{P}}=\{ (x,y): \hat{P} \textit{ su input $x$ termina entro $y$ passi} \}
+\end{displaymath}			
+			che è una relazione ricorsiva.
+			
+\subsubsection{Insiemi ricorsivi vs. insiemi ricorsivamente numerabili}
+\paragraph{Teorema} $A \subseteq \mathbb{N}$ ricorivo $\Rightarrow a$ ricorsivamente numerabile.
+\paragraph{Dimostrazione} $A$ ricorsivo $\Rightarrow P_A(x \in \mathbb{N})=\begin{cases}
+	1 &\textbf{ se } x \in A \\
+	0 &\textbf{ se } x \cancel{\in} A  \end{cases}$.
+	
+\begin{algorithm}[h]
+	\caption{$P \equiv$}
+        \begin{algorithmic}[1]
+        		 \State $input(x)$
+        		 \If{$P_A(x)==1$}
+        		 	\State $output(1)$
+        		 \Else
+        		 	\State $while(True)$
+        		 \EndIf
+        		  
+        \end{algorithmic}
+    \end{algorithm}
+    
+con $\phi_P=\begin{cases}
+	1 &\textbf{ se } x \in A \\
+	\perp &\textbf{ se } x \cancel{\in} A  \end{cases} \Rightarrow A=Dom_{\phi_{P \in P}}$. 
+
+
+
+
+Esistono insiemi non ricorsivamente numerabili? $A^C={x \in \mathbb{N}:\phi_x(x)\uparrow}$ ???? con elevato $C$ si intende complemento.
+
+
+\subsubsection{Proprietà di chiusura degli insiemi ricorsivi}
+\paragraph{Teorema} la classe degli insiemi ricorsivi è un'algebra di Boole (i.e., chiusa per complemento, intersezione, unione)
+\paragraph{Dimostrazione} Siano $A, B$ insiemi ricorsivi. Allora esistono dei programmi $P_A, P_B$ che li riconoscono, o equivalentemente, $\chi_A,\chi_B \in T$.
+\begin{itemize}
+	\item $A^C: 1 \dot{-} P_A(x)$
+	\item $A \cap B: min(P_A(x),P_B(x))$
+	\item $A \cup B: max(P_A(x),P_B(x))$
+\end{itemize}
+
+Equivalentemente:
+\begin{itemize}
+	\item $\chi_A^C: 1 \dot{-} \chi_A(x)$
+	\item $\chi_{A \cap B}: \chi_A(x) \dot \chi_B(x)$
+	\item $\chi_{A \cup B}: 1 \dot{-} (1 \dot{-} \chi_A(x)) \dot (1 \dot{-} \chi_B(x))$
+\end{itemize}
+
+
+
+\paragraph{Teorema} $A^C= \{ x:\phi_x(x)\uparrow \}$ non è ricorsivo.
+\paragraph{Dimostrazione} Se $A^C$ fosse ricorsivo avremmo che $(A^C)^C=A$ ricorsivi, ASSURDO.
+
+
+\section{Lezione 18}
+
+
+
+
+
+
+
+
+
+
 
 
 

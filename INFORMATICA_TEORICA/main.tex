@@ -2185,6 +2185,219 @@ Equivalentemente:
 
 
 \section{Lezione 18}
+\subsection{$A$ e $A^C$ ricorsivamente numerabile $\Rightarrow A$ ricorsivo}
+\paragraph{Dimostrazione informale}
+Essendo $A$ e $A^C$ ricorsivamente numerabile esiste un libro con infinite pagine su ognuna delle quali compare un elemento di $A$, ne esiste uno analogo per $A^C$. Come sfogliare questi due libri per decidere l'appartenenza ad $A$?
+\begin{enumerate}
+	\item $input(x)$
+	\item apri i due libri alla prima pagina
+	\item 
+		\begin{itemize}
+			\item se $x$ compare nella pagina del libro di $A$ stampo 1
+			\item se $x$ compare nella pagina del libro di $A^C$ stampo 0
+			\item altrimenti giro la pagina di entrambi i libri e ripeto dal punto 3
+\end{itemize}		 
+\end{enumerate}
+Sono sicuro che terminerò in quanto $A \bigcup A^C$ è tutto l'universo.
+\paragraph{Dimostrazione formale}
+Essendo $A$ e $A^C$ ricorsivamente numerabile esistono $f, g \in T$ tali che $A=Im_f, A^C=Im_g$. Sia $f$ implementata da $F$ e $g$ implementata da $G$. Il seguente programma riconosce $A$
+\begin{algorithm}[h]
+        \begin{algorithmic}[1]
+			\State $input(x)$
+			\State $i:=0$
+        		\While{True}
+        		\If{$F(i)==x$}
+        			\State $output(1)$
+        		\EndIf
+        		\If{$G(i)==x$}
+        			\State $output(0)$
+        		\EndIf
+        		\State $i:=i+1$
+        		\EndWhile
+        		  
+        \end{algorithmic}
+    \end{algorithm}
+
+Questo teorema ci suggerisce la seguente linea di indagine sulle caratteristiche di riconoscibilità di $A$:
+\begin{itemize}
+	\item se $A$ non è ricorsivo potrebbe essere ricorsivamente numerabile
+	\item se non riesco a mostrarlo, provo a studiare $A^C$
+	\item se $A^C$ è ricorsivamente numerabile allora per il teorema possiamo concludere che $A$ non è ricorsivamente numerabile
+\end{itemize}
+\paragraph{Situazione finale}
+\begin{itemize}
+	\item pari, dispari, primi, $\dots$ sono insiemi ricorsivi
+	\item $A=\{ x: \phi_x(x) \downarrow \}$ è ricorsivamente numerabile a non ricorsivo
+	\item $A^C=\{ x: \phi_x(x) \uparrow \}$ nemmeno ricorsivamente numerabile
+\end{itemize}
+
+\subsection{Proprietà di chiusura degli insiemi ricorsivamente numerabili}
+\paragraph{Teorema} Insiemi ricorsivamente numerabili sono chiusi per unione e intersezione ma non per complemento
+\paragraph{Dimostrazione} Per il complemento abbiamo mostrato che $A=\{ x: \phi_x(x) \downarrow \}$ è ricorsivamente numerabile mentre $A^C$ no. Siano $A,B$ ricorsivamente numerabili. Esistono $f,g \in T$ tale che $A=Im_f$ e $B=Im_g$.
+Siano $f$ e $g$ implementate dai programmi $F$ e $G$.
+ 
+\begin{algorithm}[h]
+	\caption{$P' \equiv$}
+        \begin{algorithmic}[1]
+			\State $input(x)$
+			\State $i:=0$
+        		\While{$F(i) \neq x$} 
+        			\State $i++$
+        		\EndWhile
+        		\State $i:=0$
+        		\While{$G(i) \neq x$} 
+        			\State $i++$
+        		\EndWhile
+        		\State $output(1)$
+        \end{algorithmic}
+    \end{algorithm}
+    
+    
+\begin{algorithm}[h]
+	\caption{$P'' \equiv$}
+        \begin{algorithmic}[1]
+			\State $input(x)$
+			\State $i:=0$
+        		\While{True} 
+        		        		\If{$F(i)==x$}
+        			\State $output(1)$
+        		\EndIf
+        		\If{$G(i)==x$}
+        			\State $output(1)$
+        		\EndIf
+        		\State $i:=i+1$
+        	\EndWhile
+        \end{algorithmic}
+    \end{algorithm}
+
+$\phi_{P'}(x)=\begin{cases}
+	1 &\textit{ se } x \in A \bigcap B \\
+	\perp &\textit{ altrimenti}
+\end{cases}$ e $\phi_{P''}(x)=\begin{cases}
+	1 &\textit{ se } x \in A \bigcup B \\
+	\perp &\textit{ altrimenti}
+\end{cases}$. 
+
+
+
+$A \bigcap B = Dom_{\phi_{P'}} \in P$ e $A \bigcup B = Dom_{\phi_{P''}} \in P$ quindi sono ricorsivamente numerabili per 2.
+
+\subsection{Teorema di Rice}
+Potente strumento per mostrare che gli insiemi appartenenti ad una certa classe non sono ricorsivi. Sia $\{ \phi_i \}$ un spa.
+\subsubsection{Insiemi che rispettano le funzioni}
+$I \subseteq \mathbb{N}$ rispetta le funzioni sse $a \in I \land \phi_a=\phi_b \Rightarrow b \in I $ con $I$ insieme dei programmi.
+
+
+
+
+In sostanza $I$ rispetta le funzioni sse data una funziione calcolata da un programma in $I$, allora $I$ contiene tutti i programmi che calcolano quella funzione.
+\paragraph{Esempio}
+$I=\{ x \in \mathbb{N}: \phi_x(3)=5 \}$ rispetta le funzioni infatti $a \in I \land \phi_a=\phi_b \Leftrightarrow \phi_a(3)=5 \land \phi_b(3)=5 \Rightarrow b \in I$.
+\subsection{Teorema di Rice}
+Sia $ I \subseteq \mathbb{N}$ un insieme che rispetta le funzioni. Allora $I$ è ricorsivo solo se $I=\emptyset$ o $I=\mathbb{N}$.
+
+
+
+
+Commento: in pratica il teorema dice che gli insiemi che rispettano le funzioni non sono mai ricorsivi.
+\paragraph{Dimostrazione}
+Sia $I$ un insieme che rispetta le funzioni con $I\neq \emptyset$ e $I\neq \mathbb{N}$. \underline{Per assurdo}, assumiamo che $I$ sia ricorsivo. Essendo $I \neq \emptyset$ posso scegliere $ a \in I$ (assioma della scelta, diverso da $\emptyset$ quindi ho almeno un elemento). Essendo poi $I \neq \mathbb{N}$ posso scegliere $\overline{a} \cancel{\in} I$.
+Definisamo la funzione $t:\mathbb{N} \rightarrow \mathbb{N}$ come
+\begin{displaymath}
+	t(n)=\begin{cases}
+		\overline{a} &\textit{ se } n \in I \\
+		{a} &\textit{ se } n \cancel{\in} I
+	\end{cases}
+\end{displaymath}
+Posso scrivere un programma per $t$ in quanto $I$ è ricorsivo ($t \in T$):
+\begin{algorithm}[h]
+	\caption{$P \equiv$}
+        \begin{algorithmic}[1]
+			\State $input(n)$
+
+        		\If{$P_I(n)==1$}
+        			\State $output(\overline{a})$
+        		\Else
+        			\State $output(a)$
+        		\EndIf
+        		
+        \end{algorithmic}
+    \end{algorithm}
+$P$ si arresta sempre e calcola $t$.
+
+
+
+
+Essendo $t \in T$, il \underline{teorema di ricorsione} assicura in un spa $\{ \phi_i \}$ l'esistenza di un $d \in \mathbb{N}$ t.c.: $\phi_d=\phi_{t(d)}$.
+Per tale $d \in \mathbb{N}$ ho due possibilità:
+\begin{itemize}
+	\item $d \in I$: poichè $I$ rispetta le funzioni e $\phi_d = \phi_{t(d)}$ allora deve essere che $t(d) \in I$ ma $t(d)=\overline{a} \cancel{\in} I$. \textbf{CONTRADDIZIONE}
+	\item $d \cancel{\in} I$: in tal caso, $t(d)=a \in I$ e poichè $I$ rispetta le funzioni e $\phi_d=\phi_{t(d)}$ allora deve essere $d \in I$. \textbf{CONTRADDIZIONE}
+\end{itemize}
+\subsection{Mostrare che un insieme non è ricorsivo}
+Il teorema di Rice suggerisce una strada per mostrare che un insieme $A \subseteq \mathbb{N}$ non è ricorsivo:
+\begin{enumerate}
+	\item mostrare che $A$ rispetta le funzioni
+	\item mostrare che $A \neq \emptyset$ e $A \neq \mathbb{N}$
+	\item uso il teorema di Rice per dire che non è ricorsivo
+\end{enumerate}
+
+\paragraph{Esempio} $A=\{ x \in \mathbb{N}: \phi_x(3)=5 \}$ è ricorsivo?
+\begin{enumerate}
+	\item $A$ rispetta le funzioni: $a \in A \land \phi_a=\phi_B \Leftrightarrow \phi_a(3)=5, \phi_b(3)=5 \Rightarrow b \in A$
+	\item per dimostrare $A \neq \emptyset$ il programma che stampa 5 su ogni input, per dimostrare $a \neq \mathbb{N}$ il programma che stampa 3 su ogni input
+	\item teorema di Rice $\Rightarrow$ $A$ non è ricorsivo 
+\end{enumerate}
+
+
+\subsection{Teorema di Rice sulla verifica automatica del software}
+Specifiche = descrizione di un problema e richiesta per i programmi che devono risolverlo automaticamente. Un problema è corretto se risponde alle specifice.
+
+
+
+Problema: (verifica automatica di correttezza software) posso scrivere un programma $V$ che testa automaticaemnte se un programma sia corretto o meno? $V$ prende in input un programma $P$ e risponde 1 se è corretto (ripsetta le specifiche), 0 altrimenti.
+
+
+
+
+Definiamo l'insieme dei programmi corretti $PC=\{ P:P \textit{ è corretto} \}$. $PC$ può essere riconosciuto da un $V$? O in modo equivalmente $PC$ è ricorsivo?
+
+
+
+
+$PC$ rispetta le funzioni! $P \in PC \land \phi_P=\phi_{P'} \Leftrightarrow P \textit{ corretto e } P' \textit{ corretto} \Rightarrow P' \in PC \Rightarrow PC$ non è ricorsivo (teorema di Rice).
+
+
+
+
+Su alcune specifiche posso verificare automaticamente la correttezza dei corrispettivi programmi:
+\begin{enumerate}
+	\item specifiche = "nessun programma andrà bene" $\Rightarrow PC = \emptyset$
+	\item specifiche = "tutti i programmi andranno bene" $\Rightarrow PC = \mathbb{N}$
+\end{enumerate}
+
+
+\section{Lezione 19}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
